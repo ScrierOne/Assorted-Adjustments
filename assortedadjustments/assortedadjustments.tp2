@@ -40,6 +40,7 @@ BUT_ONLY IF_EXISTS
 BEGIN "Roleplay-Friendly Berserk Script For Minsc" DESIGNATED 92
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate "
+REQUIRE_COMPONENT "assortedadjustments.tp2" 91 "This component requires 'Minsc Remains Controllable While Using His Rage' to be installed"
 
 EXTEND_BOTTOM "Minsc.bcs" "%MOD_FOLDER%/Scripts/party_friendly_berserk.baf"
 
