@@ -1,0 +1,84 @@
+// Ring of Free Action
+
+@10=~Ring of Free Action: Edventar's Gift
+This ring was given to the reef scavenger and hunter known only as Edventar by a group of aquatic elves long his friends. His help in routing the "Pirate Queen" Yenandra of Dambrath was instrumental in their survival, though Yenandra continues to be feared anywhere the water meets land.
+
+STATISTICS:
+
+Special: The wearer is immune to everything, magical and otherwise, that hinders mobility in any way.
+
+Weight: 0~
+
+// Free Action (Spell, Scroll)
+
+@20=~Free Action
+(Abjuration)
+
+Level: 4
+Sphere: Charm
+Range: Touch 
+Duration: 1 turn + 1 round/level 
+Casting Time: 5 
+Area of Effect: 1 creature 
+Saving Throw: None 
+
+While under the effects of this spell, the recipient becomes immune to anything that hinders <PRO_HISHER> movement. This includes the effects of Web, Hold Person, Grease, and Entangle.~
+
+// Potion of Freedom
+
+@30=~This potion acts like the spell Free Action when consumed. The drinker becomes completely immune to any effects that hinder action or movement, whether it is magical in origin or not. The duration of the potion is 2 hours.
+
+STATISTICS:
+
+Special: Free Action
+Duration: 2 hours
+
+Weight: 1~
+
+// Spider's Bane
+
+@40=~This sword was originally forged by the dwarves of the Orothiar tribe in Cloakwood. They created the blade to help foster goodwill between them and the Grand Dukes of Baldur's Gate. Wielded by the Grand Dukes for about a century, the sword was eventually lost, ironically in a fight against ettercaps and spiders. Who wields the blade is now unknown, but its recovery would aid greatly in fighting the current spider infestation that plagues the Cloakwood.
+
+STATISTICS:
+
+Equipped abilities:
+– Protects the wielder from any magics that hinder movement, such as Hold and Web.
+
+THAC0: +2
+Damage: 1d10+2 (slashing)
+Speed Factor: 8
+Proficiency Type: Two-handed Sword
+Type: Two-handed
+Requires:
+ 13 Strength
+
+Weight: 10~
+
+// Skull Trap
+
+@50=~Skull Trap
+(Necromancy)
+
+Level: 3
+Range: 60 ft.
+Duration: Special
+Casting Time: 4
+Area of Effect: 11-ft. radius
+Saving Throw: 1/2
+
+When this spell is cast, a skull is thrown by the caster at the target area. The skull floats in the area until a creature comes within 8 ft. of it. When this happens, the skull is triggered and explodes damaging everyone within a 11-ft. radius. When the skulltrap discharges, the skull flashes briefly with red or violet light and violently explodes, releasing a blast of energy drawn from the Negative Material plane. The burst of negative energy does 2d4 hp damage plus 1d4 hp damage for every level of the caster. All living creatures within 10' of the skull must make a Saving Throw vs. Spell to suffer only half damage from the blast. ~
+
+// Cleric Skull Trap (Deities of Faerûn)
+
+@51=~Skull Trap
+(Necromancy)
+
+Level: 4
+Sphere: Necromantic
+Range: 60 ft.
+Duration: Special
+Casting Time: 4
+Area of Effect: 12-ft. radius
+Saving Throw: 1/2
+
+When this spell is cast, a skull is thrown by the caster at the target area. The skull floats in the area until a creature comes within 8 ft. of it. When this happens, the skull is triggered and explodes damaging everyone within a 11-ft. radius. When the skulltrap discharges, the skull flashes briefly with red or violet light and violently explodes, releasing a blast of energy drawn from the Negative Material plane. The burst of negative energy does 2d4 hp damage plus 1d4 hp damage for every level of the caster. All living creatures within 10' of the skull must make a Saving Throw vs. Spell to suffer only half damage from the blast. ~

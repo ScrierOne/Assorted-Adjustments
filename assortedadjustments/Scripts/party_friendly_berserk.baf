@@ -1,0 +1,32 @@
+IF
+Global("MinscIsCurrentlyBerserk","LOCALS",0)
+  CheckSpellState(Myself,MINSC_BERSERK)
+THEN
+  RESPONSE #100
+		SetGlobal("MinscIsCurrentlyBerserk","LOCALS",1)
+END
+
+IF	
+	Global("MinscIsCurrentlyBerserk", "LOCALS",1)
+	IsWeaponRanged(Myself)
+THEN
+  RESPONSE #100
+	EquipMostDamagingMelee()
+  END
+  
+  IF	
+	Global("MinscIsCurrentlyBerserk", "LOCALS",1)
+	See([EVILCUTOFF])
+	!IsWeaponRanged(Myself)
+THEN
+  RESPONSE #100
+	AttackReevaluate(NearestEnemyOf(Myself),15)
+  END
+  
+IF
+Global("MinscIsCurrentlyBerserk","LOCALS",1)
+  !CheckSpellState(Myself,MINSC_BERSERK)
+THEN
+  RESPONSE #100
+		SetGlobal("MinscIsCurrentlyBerserk","LOCALS",0)
+END

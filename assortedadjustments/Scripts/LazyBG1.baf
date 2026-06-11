@@ -1,0 +1,3538 @@
+IF
+	HotKey(S)
+THEN
+	RESPONSE #100
+		EquipMostDamagingMelee()
+END
+
+IF
+	HotKey(D)
+THEN
+	RESPONSE #100
+		EquipRanged()
+END
+
+IF
+	Global("Thieving","LOCALS",0)
+	!Class(Myself,BARD_ALL)
+	HotKey(G)
+THEN
+	RESPONSE #100
+		SetGlobal("Thieving","LOCALS",1)
+		DisplayStringHead(Myself,25482)  // Attempting to hide in shadows
+END
+
+IF
+	Global("Thieving","LOCALS",1)
+	!Class(Myself,BARD_ALL)
+	HotKey(G)
+THEN
+	RESPONSE #100
+		SetGlobal("Thieving","LOCALS",0)
+		DisplayStringHead(Myself,25483)  // Searching for traps
+END
+
+IF
+	Global("BardSong","LOCALS",0)
+	Class(Myself,BARD_ALL)
+	HotKey(G)
+THEN
+	RESPONSE #100
+		SetGlobal("BardSong","LOCALS",1)
+		DisplayStringHead(Myself,25486)  // Singing constantly if idle
+END
+
+IF
+	Global("BardSong","LOCALS",1)
+	Class(Myself,BARD_ALL)
+	HotKey(G)
+THEN
+	RESPONSE #100
+		SetGlobal("BardSong","LOCALS",0)
+		DisplayStringHead(Myself,25487)  // Singing only during combat
+END
+
+IF
+	Global("Attacking","LOCALS",0)
+	HotKey(A)
+THEN
+	RESPONSE #100
+		SetGlobal("Attacking","LOCALS",1)
+		DisplayStringHead(Myself,25488)  // Attacking enemies
+END
+
+IF
+	Global("Attacking","LOCALS",1)
+	HotKey(A)
+THEN
+	RESPONSE #100
+		SetGlobal("Attacking","LOCALS",0)
+		DisplayStringHead(Myself,25489)  // Not attacking enemies
+END
+
+IF
+	Global("BardSong","LOCALS",1)
+	OR(2)
+		Global("BardInCombat","LOCALS",0)
+		Global("Attacking","LOCALS",0)
+	ActionListEmpty()
+	Class(Myself,BARD_ALL)
+	!ModalState(BATTLESONG)
+	!StateCheck(Myself,STATE_INVISIBLE)
+THEN
+	RESPONSE #100
+		BattleSong()
+END
+
+IF
+	Global("BardSong","LOCALS",0)
+	Global("Attacking","LOCALS",0)
+	ActionListEmpty()
+	Class(Myself,BARD_ALL)
+	!ModalState(BATTLESONG)
+	!StateCheck(Myself,STATE_INVISIBLE)
+	OR(2)
+		See([EVILCUTOFF])
+		CombatCounterGT(0)
+THEN
+	RESPONSE #100
+		BattleSong()
+END
+
+// Bards auto-attack when Battlesong is on, but not when manually ordered to sing in combat:
+
+IF
+	Global("BardSong","LOCALS",1)
+	Global("Attacking","LOCALS",1)
+	GlobalLT("BardInCombat","LOCALS",1)
+	ActionListEmpty()
+	See([EVILCUTOFF])
+	!Class(NearestEnemyOf(Myself),INNOCENT)
+	!StateCheck(Myself,STATE_INVISIBLE)
+	CheckStatLT(Myself,1,SANCTUARY)
+	ModalState(BATTLESONG)
+	WeaponEffectiveVs(NearestEnemyOf(Myself),MAINHAND)
+	WeaponCanDamage(NearestEnemyOf(Myself),MAINHAND)
+	OR(2)
+		!CheckSpellState(NearestEnemyOf(Myself),RED_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTFIRE)
+	OR(2)
+		!CheckSpellState(NearestEnemyOf(Myself),BLUE_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTCOLD)
+	!IsWeaponRanged(Myself)
+THEN
+	RESPONSE #100
+		ClearActions(Myself)
+		SetGlobal("BardInCombat","LOCALS",1)
+END
+
+IF
+	Global("BardSong","LOCALS",1)
+	Global("Attacking","LOCALS",1)
+	GlobalLT("BardInCombat","LOCALS",1)
+	ActionListEmpty()
+	See([EVILCUTOFF])
+	!Class(NearestEnemyOf(Myself),INNOCENT)
+	!StateCheck(Myself,STATE_INVISIBLE)
+	CheckStatLT(Myself,1,SANCTUARY)
+	ModalState(BATTLESONG)
+	WeaponEffectiveVs(NearestEnemyOf(Myself),MAINHAND)
+	WeaponCanDamage(NearestEnemyOf(Myself),MAINHAND)
+	IsWeaponRanged(Myself)
+THEN
+	RESPONSE #100
+		SetGlobal("BardInCombat","LOCALS",1)
+		ClearActions(Myself)
+END
+
+IF
+	Global("BardInCombat","LOCALS",1)
+	ModalState(BATTLESONG)
+THEN
+	RESPONSE #100
+		SetGlobal("BardInCombat","LOCALS",2)
+		ClearActions(Myself)
+		BattleSong()
+END
+
+IF
+	Global("BardInCombat","LOCALS",2)
+	ActionListEmpty()
+	!ModalState(BATTLESONG)
+THEN
+	RESPONSE #100
+		SetGlobal("BardInCombat","LOCALS",1)
+END
+
+IF
+	GlobalGT("BardInCombat","LOCALS",0)
+	!See([EVILCUTOFF])
+THEN
+	RESPONSE #100
+		SetGlobal("BardInCombat","LOCALS",0)
+END
+
+// Thieves auto-attack when auto-detecting is on, but not when manually ordered to in combat:
+
+IF
+	Global("Thieving","LOCALS",0)
+	Global("Attacking","LOCALS",1)
+	GlobalLT("ThiefInCombat","LOCALS",1)
+	ActionListEmpty()
+	See([EVILCUTOFF])
+	!StateCheck(Myself,STATE_INVISIBLE)
+	CheckStatLT(Myself,1,SANCTUARY)
+	ModalState(DETECTTRAPS)
+	WeaponEffectiveVs(NearestEnemyOf(Myself),MAINHAND)
+	WeaponCanDamage(NearestEnemyOf(Myself),MAINHAND)
+	OR(2)
+		!CheckSpellState(NearestEnemyOf(Myself),RED_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTFIRE)
+	OR(2)
+		!CheckSpellState(NearestEnemyOf(Myself),BLUE_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTCOLD)
+	!IsWeaponRanged(Myself)
+THEN
+	RESPONSE #100
+		ClearActions(Myself)
+		SetGlobal("ThiefInCombat","LOCALS",1)
+END
+
+IF
+	Global("Thieving","LOCALS",0)
+	Global("Attacking","LOCALS",1)
+	Global("ThiefInCombat","LOCALS",0)
+	ActionListEmpty()
+	See([EVILCUTOFF])
+	!StateCheck(Myself,STATE_INVISIBLE)
+	CheckStatLT(Myself,1,SANCTUARY)
+	ModalState(DETECTTRAPS)
+	WeaponEffectiveVs(NearestEnemyOf(Myself),MAINHAND)
+	WeaponCanDamage(NearestEnemyOf(Myself),MAINHAND)
+	IsWeaponRanged(Myself)
+THEN
+	RESPONSE #100
+		SetGlobal("ThiefInCombat","LOCALS",1)
+		ClearActions(Myself)
+END
+
+IF
+	Global("ThiefInCombat","LOCALS",1)
+	ModalState(DETECTTRAPS)
+THEN
+	RESPONSE #100
+		SetGlobal("ThiefInCombat","LOCALS",2)
+		ClearActions(Myself)
+		FindTraps()
+END
+
+IF
+	Global("ThiefInCombat","LOCALS",2)
+	ActionListEmpty()
+	!ModalState(DETECTTRAPS)
+THEN
+	RESPONSE #100
+		SetGlobal("ThiefInCombat","LOCALS",1)
+END
+
+IF
+	GlobalGT("ThiefInCombat","LOCALS",0)
+	!See([EVILCUTOFF])
+THEN
+	RESPONSE #100
+		SetGlobal("ThiefInCombat","LOCALS",0)
+END
+
+IF
+	Global("Thieving","LOCALS",0)
+	ActionListEmpty()
+	OR(4)
+		!See([EVILCUTOFF])
+		Global("Attacking","LOCALS",0)
+		StateCheck(Myself,STATE_INVISIBLE)
+		CheckStat(Myself,1,SANCTUARY)
+	OR(2)
+		Class(Myself,THIEF_ALL)
+		Class(Myself,MONK)
+	!ModalState(TURNUNDEAD)
+	!ModalState(DETECTTRAPS)
+	!ModalState(STEALTH)
+THEN
+	RESPONSE #100
+		FindTraps()
+END
+
+IF
+	Global("Thieving","LOCALS",1)
+	!GlobalTimerNotExpired("Hiding","LOCALS")
+	ActionListEmpty()
+	!See([EVILCUTOFF])
+	OR(3)
+		Class(Myself,THIEF_ALL)
+		Class(Myself,RANGER_ALL)
+		Class(Myself,MONK)
+	!ModalState(TURNUNDEAD)
+	!ModalState(STEALTH)
+	!ButtonDisabled(BUTTON_THIEVING)
+THEN
+	RESPONSE #100
+		SetGlobalTimer("Hiding","LOCALS",ONE_ROUND)
+		Hide()
+END
+
+IF
+	Global("Attacking","LOCALS",1)
+	ActionListEmpty()
+	!StateCheck(Myself,STATE_INVISIBLE)
+	CheckStatLT(Myself,1,SANCTUARY)
+	See([EVILCUTOFF])
+	!Class(NearestEnemyOf(Myself),INNOCENT)
+	!InParty([EVILCUTOFF])
+	!ModalState(TURNUNDEAD)
+	!ModalState(DETECTTRAPS)
+	!ModalState(BATTLESONG)
+	WeaponEffectiveVs(NearestEnemyOf(Myself),MAINHAND)
+	WeaponCanDamage(NearestEnemyOf(Myself),MAINHAND)
+	OR(2)
+		!CheckSpellState(NearestEnemyOf(Myself),RED_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTFIRE)
+	OR(2)
+		!CheckSpellState(NearestEnemyOf(Myself),BLUE_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTCOLD)
+	!IsWeaponRanged(Myself)
+THEN
+	RESPONSE #100
+		Attack(NearestEnemyOf(Myself))
+END
+
+IF
+	Global("Attacking","LOCALS",1)
+	ActionListEmpty()
+	!StateCheck(Myself,STATE_INVISIBLE)
+	CheckStatLT(Myself,1,SANCTUARY)
+	See([EVILCUTOFF])
+	!Class(SecondNearestEnemyOf(Myself),INNOCENT)
+	!InParty([EVILCUTOFF])
+	!ModalState(TURNUNDEAD)
+	!ModalState(DETECTTRAPS)
+	!ModalState(BATTLESONG)
+	WeaponEffectiveVs(SecondNearestEnemyOf(Myself),MAINHAND)
+	WeaponCanDamage(SecondNearestEnemyOf(Myself),MAINHAND)
+	OR(2)
+		!CheckSpellState(SecondNearestEnemyOf(Myself),RED_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTFIRE)
+	OR(2)
+		!CheckSpellState(SecondNearestEnemyOf(Myself),BLUE_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTCOLD)
+	!IsWeaponRanged(Myself)
+THEN
+	RESPONSE #100
+		Attack(SecondNearestEnemyOf(Myself))
+END
+
+IF
+	Global("Attacking","LOCALS",1)
+	ActionListEmpty()
+	!StateCheck(Myself,STATE_INVISIBLE)
+	CheckStatLT(Myself,1,SANCTUARY)
+	See([EVILCUTOFF])
+	!Class(ThirdNearestEnemyOf(Myself),INNOCENT)
+	!InParty([EVILCUTOFF])
+	!ModalState(TURNUNDEAD)
+	!ModalState(DETECTTRAPS)
+	!ModalState(BATTLESONG)
+	WeaponEffectiveVs(ThirdNearestEnemyOf(Myself),MAINHAND)
+	WeaponCanDamage(ThirdNearestEnemyOf(Myself),MAINHAND)
+	OR(2)
+		!CheckSpellState(ThirdNearestEnemyOf(Myself),RED_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTFIRE)
+	OR(2)
+		!CheckSpellState(ThirdNearestEnemyOf(Myself),BLUE_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTCOLD)
+	!IsWeaponRanged(Myself)
+THEN
+	RESPONSE #100
+		Attack(ThirdNearestEnemyOf(Myself))
+END
+
+IF
+	Global("Attacking","LOCALS",1)
+	ActionListEmpty()
+	!StateCheck(Myself,STATE_INVISIBLE)
+	CheckStatLT(Myself,1,SANCTUARY)
+	See([EVILCUTOFF])
+	!Class(FourthNearestEnemyOf(Myself),INNOCENT)
+	!InParty([EVILCUTOFF])
+	!ModalState(TURNUNDEAD)
+	!ModalState(DETECTTRAPS)
+	!ModalState(BATTLESONG)
+	WeaponEffectiveVs(FourthNearestEnemyOf(Myself),MAINHAND)
+	WeaponCanDamage(FourthNearestEnemyOf(Myself),MAINHAND)
+	OR(2)
+		!CheckSpellState(FourthNearestEnemyOf(Myself),RED_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTFIRE)
+	OR(2)
+		!CheckSpellState(FourthNearestEnemyOf(Myself),BLUE_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTCOLD)
+	!IsWeaponRanged(Myself)
+THEN
+	RESPONSE #100
+		Attack(FourthNearestEnemyOf(Myself))
+END
+
+IF
+	Global("Attacking","LOCALS",1)
+	ActionListEmpty()
+	!StateCheck(Myself,STATE_INVISIBLE)
+	CheckStatLT(Myself,1,SANCTUARY)
+	See([EVILCUTOFF])
+	!Class(FifthNearestEnemyOf(Myself),INNOCENT)
+	!InParty([EVILCUTOFF])
+	!ModalState(TURNUNDEAD)
+	!ModalState(DETECTTRAPS)
+	!ModalState(BATTLESONG)
+	WeaponEffectiveVs(FifthNearestEnemyOf(Myself),MAINHAND)
+	WeaponCanDamage(FifthNearestEnemyOf(Myself),MAINHAND)
+	OR(2)
+		!CheckSpellState(FifthNearestEnemyOf(Myself),RED_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTFIRE)
+	OR(2)
+		!CheckSpellState(FifthNearestEnemyOf(Myself),BLUE_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTCOLD)
+	!IsWeaponRanged(Myself)
+THEN
+	RESPONSE #100
+		Attack(FifthNearestEnemyOf(Myself))
+END
+
+IF
+	Global("Attacking","LOCALS",1)
+	ActionListEmpty()
+	!StateCheck(Myself,STATE_INVISIBLE)
+	CheckStatLT(Myself,1,SANCTUARY)
+	See([EVILCUTOFF])
+	!Class(SixthNearestEnemyOf(Myself),INNOCENT)
+	!InParty([EVILCUTOFF])
+	!ModalState(TURNUNDEAD)
+	!ModalState(DETECTTRAPS)
+	!ModalState(BATTLESONG)
+	WeaponEffectiveVs(SixthNearestEnemyOf(Myself),MAINHAND)
+	WeaponCanDamage(SixthNearestEnemyOf(Myself),MAINHAND)
+	OR(2)
+		!CheckSpellState(SixthNearestEnemyOf(Myself),RED_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTFIRE)
+	OR(2)
+		!CheckSpellState(SixthNearestEnemyOf(Myself),BLUE_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTCOLD)
+	!IsWeaponRanged(Myself)
+THEN
+	RESPONSE #100
+		Attack(SixthNearestEnemyOf(Myself))
+END
+
+
+IF
+	Global("Attacking","LOCALS",1)
+	ActionListEmpty()
+	!StateCheck(Myself,STATE_INVISIBLE)
+	CheckStatLT(Myself,1,SANCTUARY)
+	See(NearestEnemyOf(Myself))
+	StateCheck(NearestEnemyOf(Myself),STATE_HELPLESS)
+	!Class(NearestEnemyOf(Myself),INNOCENT)
+	!InParty(NearestEnemyOf(Myself))
+	!ModalState(TURNUNDEAD)
+	!ModalState(DETECTTRAPS)
+	!ModalState(BATTLESONG)
+	WeaponEffectiveVs(NearestEnemyOf(Myself),MAINHAND)
+	WeaponCanDamage(NearestEnemyOf(Myself),MAINHAND)
+	OR(2)
+		!CheckSpellState(NearestEnemyOf(Myself),RED_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTFIRE)
+	OR(2)
+		!CheckSpellState(NearestEnemyOf(Myself),BLUE_FIRESHIELD)
+		CheckStatGT(Myself,99,RESISTCOLD)
+	!IsWeaponRanged(Myself)
+THEN
+	RESPONSE #100
+		AttackReevaluate(NearestEnemyOf(Myself),15)
+END
+
+IF
+	Global("Attacking","LOCALS",1)
+	ActionListEmpty()
+	!StateCheck(Myself,STATE_INVISIBLE)
+	CheckStatLT(Myself,1,SANCTUARY)
+	See([EVILCUTOFF])
+	!Class(NearestEnemyOf(Myself),INNOCENT)
+	!InParty([EVILCUTOFF])
+	!ModalState(TURNUNDEAD)
+	!ModalState(DETECTTRAPS)
+	WeaponEffectiveVs(NearestEnemyOf(Myself),MAINHAND)
+	WeaponCanDamage(NearestEnemyOf(Myself),MAINHAND)
+	IsWeaponRanged(Myself)
+THEN
+	RESPONSE #100
+		AttackReevaluate(NearestEnemyOf(Myself),15)
+END
+
+IF
+	Global("Attacking","LOCALS",1)
+	ActionListEmpty()
+	!StateCheck(Myself,STATE_INVISIBLE)
+	CheckStatLT(Myself,1,SANCTUARY)
+	See(NearestEnemyOf(Myself))
+	StateCheck(NearestEnemyOf(Myself),STATE_HELPLESS)
+	!Class(NearestEnemyOf(Myself),INNOCENT)
+	!InParty(NearestEnemyOf(Myself))
+	!ModalState(TURNUNDEAD)
+	!ModalState(DETECTTRAPS)
+	WeaponEffectiveVs(NearestEnemyOf(Myself),MAINHAND)
+	WeaponCanDamage(NearestEnemyOf(Myself),MAINHAND)
+	IsWeaponRanged(Myself)
+THEN
+	RESPONSE #100
+		AttackReevaluate(NearestEnemyOf(Myself),15)
+END
+
+IF
+	AttackedBy([EVILCUTOFF],DEFAULT)
+	Range(LastAttackerOf(Myself),4)
+	IsWeaponRanged(Myself)
+	!ModalState(TURNUNDEAD)
+	!ModalState(DETECTTRAPS)
+THEN
+	RESPONSE #100
+		EquipMostDamagingMelee()
+		SetGlobal("RangedMelee","LOCALS",1)
+END
+
+IF
+	Global("RangedMelee","LOCALS",1)
+	ActionListEmpty()
+	!Range(NearestEnemyOf(Myself),4)
+	!IsWeaponRanged(Myself)
+THEN
+	RESPONSE #100
+		EquipRanged()
+		SetGlobal("RangedMelee","LOCALS",0)
+END
+
+IF
+	Global("Healing","LOCALS",0)
+	HotKey(E)
+THEN
+	RESPONSE #100
+		SetGlobal("Healing","LOCALS",1)
+		DisplayStringHead(Myself,12138)  // Healing
+END
+
+IF
+	Global("Healing","LOCALS",1)
+	HotKey(E)
+THEN
+	RESPONSE #100
+		SetGlobal("Healing","LOCALS",0)
+		DisplayStringHead(Myself,11973)  // done
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(PALADIN_LAY_ON_HANDS)  // SPCL211.SPL (Lay On Hands)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Myself([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(Myself([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(Myself([PC]),PALADIN_LAY_ON_HANDS)  // SPCL211.SPL (Lay On Hands)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(PALADIN_LAY_ON_HANDS)  // SPCL211.SPL (Lay On Hands)
+	See([PC])
+	!StateCheck([PC],STATE_IMPROVEDINVISIBILITY)
+	See([PC])
+	!CheckStatGT([PC],0,WIZARD_SPELL_TURNING)
+	!CheckStatGT([PC],0,WIZARD_SPELL_TRAP)
+	!CheckStatGT([PC],0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT([PC],0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT([PC],80)
+THEN
+	RESPONSE #100
+		Spell([PC],PALADIN_LAY_ON_HANDS)  // SPCL211.SPL (Lay On Hands)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(PALADIN_LAY_ON_HANDS)  // SPCL211.SPL (Lay On Hands)
+	See(SecondNearest([PC]))
+	!StateCheck(SecondNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(SecondNearest([PC]))
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(SecondNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(SecondNearest([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(SecondNearest([PC]),PALADIN_LAY_ON_HANDS)  // SPCL211.SPL (Lay On Hands)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(PALADIN_LAY_ON_HANDS)  // SPCL211.SPL (Lay On Hands)
+	See(ThirdNearest([PC]))
+	!StateCheck(ThirdNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(ThirdNearest([PC]))
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(ThirdNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(ThirdNearest([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(ThirdNearest([PC]),PALADIN_LAY_ON_HANDS)  // SPCL211.SPL (Lay On Hands)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(PALADIN_LAY_ON_HANDS)  // SPCL211.SPL (Lay On Hands)
+	See(FourthNearest([PC]))
+	!StateCheck(FourthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(FourthNearest([PC]))
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(FourthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(FourthNearest([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(FourthNearest([PC]),PALADIN_LAY_ON_HANDS)  // SPCL211.SPL (Lay On Hands)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(PALADIN_LAY_ON_HANDS)  // SPCL211.SPL (Lay On Hands)
+	See(FifthNearest([PC]))
+	!StateCheck(FifthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(FifthNearest([PC]))
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(FifthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(FifthNearest([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(FifthNearest([PC]),PALADIN_LAY_ON_HANDS)  // SPCL211.SPL (Lay On Hands)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(PALADIN_LAY_ON_HANDS)  // SPCL211.SPL (Lay On Hands)
+	See(SixthNearest([PC]))
+	!StateCheck(SixthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(SixthNearest([PC]))
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(SixthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(SixthNearest([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(SixthNearest([PC]),PALADIN_LAY_ON_HANDS)  // SPCL211.SPL (Lay On Hands)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(INNATE_CURE_LIGHT_WOUNDS)  // SPIN101.SPL (Cure Light Wounds)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Myself([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(Myself([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(Myself([PC]),INNATE_CURE_LIGHT_WOUNDS)  // SPIN101.SPL (Cure Light Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(INNATE_CURE_LIGHT_WOUNDS)  // SPIN101.SPL (Cure Light Wounds)
+	See([PC])
+	!StateCheck([PC],STATE_IMPROVEDINVISIBILITY)
+	See([PC])
+	!CheckStatGT([PC],0,WIZARD_SPELL_TURNING)
+	!CheckStatGT([PC],0,WIZARD_SPELL_TRAP)
+	!CheckStatGT([PC],0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT([PC],0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT([PC],80)
+THEN
+	RESPONSE #100
+		Spell([PC],INNATE_CURE_LIGHT_WOUNDS)  // SPIN101.SPL (Cure Light Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(INNATE_CURE_LIGHT_WOUNDS)  // SPIN101.SPL (Cure Light Wounds)
+	See(SecondNearest([PC]))
+	!StateCheck(SecondNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(SecondNearest([PC]))
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(SecondNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(SecondNearest([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(SecondNearest([PC]),INNATE_CURE_LIGHT_WOUNDS)  // SPIN101.SPL (Cure Light Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(INNATE_CURE_LIGHT_WOUNDS)  // SPIN101.SPL (Cure Light Wounds)
+	See(ThirdNearest([PC]))
+	!StateCheck(ThirdNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(ThirdNearest([PC]))
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(ThirdNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(ThirdNearest([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(ThirdNearest([PC]),INNATE_CURE_LIGHT_WOUNDS)  // SPIN101.SPL (Cure Light Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(INNATE_CURE_LIGHT_WOUNDS)  // SPIN101.SPL (Cure Light Wounds)
+	See(FourthNearest([PC]))
+	!StateCheck(FourthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(FourthNearest([PC]))
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(FourthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(FourthNearest([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(FourthNearest([PC]),INNATE_CURE_LIGHT_WOUNDS)  // SPIN101.SPL (Cure Light Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(INNATE_CURE_LIGHT_WOUNDS)  // SPIN101.SPL (Cure Light Wounds)
+	See(FifthNearest([PC]))
+	!StateCheck(FifthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(FifthNearest([PC]))
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(FifthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(FifthNearest([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(FifthNearest([PC]),INNATE_CURE_LIGHT_WOUNDS)  // SPIN101.SPL (Cure Light Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(INNATE_CURE_LIGHT_WOUNDS)  // SPIN101.SPL (Cure Light Wounds)
+	See(SixthNearest([PC]))
+	!StateCheck(SixthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(SixthNearest([PC]))
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(SixthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(SixthNearest([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(SixthNearest([PC]),INNATE_CURE_LIGHT_WOUNDS)  // SPIN101.SPL (Cure Light Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_LIGHT_WOUNDS)  // SPPR103.SPL (Cure Light Wounds)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Myself([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(Myself([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(Myself([PC]),CLERIC_CURE_LIGHT_WOUNDS)  // SPPR103.SPL (Cure Light Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_LIGHT_WOUNDS)  // SPPR103.SPL (Cure Light Wounds)
+	See([PC])
+	!StateCheck([PC],STATE_IMPROVEDINVISIBILITY)
+	See([PC])
+	!CheckStatGT([PC],0,WIZARD_SPELL_TURNING)
+	!CheckStatGT([PC],0,WIZARD_SPELL_TRAP)
+	!CheckStatGT([PC],0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT([PC],0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT([PC],80)
+THEN
+	RESPONSE #100
+		Spell([PC],CLERIC_CURE_LIGHT_WOUNDS)  // SPPR103.SPL (Cure Light Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_LIGHT_WOUNDS)  // SPPR103.SPL (Cure Light Wounds)
+	See(SecondNearest([PC]))
+	!StateCheck(SecondNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(SecondNearest([PC]))
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(SecondNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(SecondNearest([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(SecondNearest([PC]),CLERIC_CURE_LIGHT_WOUNDS)  // SPPR103.SPL (Cure Light Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_LIGHT_WOUNDS)  // SPPR103.SPL (Cure Light Wounds)
+	See(ThirdNearest([PC]))
+	!StateCheck(ThirdNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(ThirdNearest([PC]))
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(ThirdNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(ThirdNearest([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(ThirdNearest([PC]),CLERIC_CURE_LIGHT_WOUNDS)  // SPPR103.SPL (Cure Light Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_LIGHT_WOUNDS)  // SPPR103.SPL (Cure Light Wounds)
+	See(FourthNearest([PC]))
+	!StateCheck(FourthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(FourthNearest([PC]))
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(FourthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(FourthNearest([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(FourthNearest([PC]),CLERIC_CURE_LIGHT_WOUNDS)  // SPPR103.SPL (Cure Light Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_LIGHT_WOUNDS)  // SPPR103.SPL (Cure Light Wounds)
+	See(FifthNearest([PC]))
+	!StateCheck(FifthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(FifthNearest([PC]))
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(FifthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(FifthNearest([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(FifthNearest([PC]),CLERIC_CURE_LIGHT_WOUNDS)  // SPPR103.SPL (Cure Light Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_LIGHT_WOUNDS)  // SPPR103.SPL (Cure Light Wounds)
+	See(SixthNearest([PC]))
+	!StateCheck(SixthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(SixthNearest([PC]))
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(SixthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(SixthNearest([PC]),90)
+THEN
+	RESPONSE #100
+		Spell(SixthNearest([PC]),CLERIC_CURE_LIGHT_WOUNDS)  // SPPR103.SPL (Cure Light Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_MODERATE_WOUNDS)  // SPPR216.SPL (Cure Moderate Wounds)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Myself([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(Myself([PC]),80)
+THEN
+	RESPONSE #100
+		Spell(Myself([PC]),CLERIC_CURE_MODERATE_WOUNDS)  // SPPR216.SPL (Cure Moderate Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_MODERATE_WOUNDS)  // SPPR216.SPL (Cure Moderate Wounds)
+	See([PC])
+	!StateCheck([PC],STATE_IMPROVEDINVISIBILITY)
+	See([PC])
+	!CheckStatGT([PC],0,WIZARD_SPELL_TURNING)
+	!CheckStatGT([PC],0,WIZARD_SPELL_TRAP)
+	!CheckStatGT([PC],0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT([PC],0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT([PC],80)
+THEN
+	RESPONSE #100
+		Spell([PC],CLERIC_CURE_MODERATE_WOUNDS)  // SPPR216.SPL (Cure Moderate Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_MODERATE_WOUNDS)  // SPPR216.SPL (Cure Moderate Wounds)
+	See(SecondNearest([PC]))
+	!StateCheck(SecondNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(SecondNearest([PC]))
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(SecondNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(SecondNearest([PC]),80)
+THEN
+	RESPONSE #100
+		Spell(SecondNearest([PC]),CLERIC_CURE_MODERATE_WOUNDS)  // SPPR216.SPL (Cure Moderate Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_MODERATE_WOUNDS)  // SPPR216.SPL (Cure Moderate Wounds)
+	See(ThirdNearest([PC]))
+	!StateCheck(ThirdNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(ThirdNearest([PC]))
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(ThirdNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(ThirdNearest([PC]),80)
+THEN
+	RESPONSE #100
+		Spell(ThirdNearest([PC]),CLERIC_CURE_MODERATE_WOUNDS)  // SPPR216.SPL (Cure Moderate Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_MODERATE_WOUNDS)  // SPPR216.SPL (Cure Moderate Wounds)
+	See(FourthNearest([PC]))
+	!StateCheck(FourthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(FourthNearest([PC]))
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(FourthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(FourthNearest([PC]),80)
+THEN
+	RESPONSE #100
+		Spell(FourthNearest([PC]),CLERIC_CURE_MODERATE_WOUNDS)  // SPPR216.SPL (Cure Moderate Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_MODERATE_WOUNDS)  // SPPR216.SPL (Cure Moderate Wounds)
+	See(FifthNearest([PC]))
+	!StateCheck(FifthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(FifthNearest([PC]))
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(FifthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(FifthNearest([PC]),80)
+THEN
+	RESPONSE #100
+		Spell(FifthNearest([PC]),CLERIC_CURE_MODERATE_WOUNDS)  // SPPR216.SPL (Cure Moderate Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_MODERATE_WOUNDS)  // SPPR216.SPL (Cure Moderate Wounds)
+	See(SixthNearest([PC]))
+	!StateCheck(SixthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(SixthNearest([PC]))
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(SixthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(SixthNearest([PC]),80)
+THEN
+	RESPONSE #100
+		Spell(SixthNearest([PC]),CLERIC_CURE_MODERATE_WOUNDS)  // SPPR216.SPL (Cure Moderate Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_MEDIUM_WOUNDS)  // SPPR315.SPL (Cure Medium Wounds)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Myself([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(Myself([PC]),80)
+THEN
+	RESPONSE #100
+		Spell(Myself([PC]),CLERIC_CURE_MEDIUM_WOUNDS)  // SPPR315.SPL (Cure Medium Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_MEDIUM_WOUNDS)  // SPPR315.SPL (Cure Medium Wounds)
+	See([PC])
+	!StateCheck([PC],STATE_IMPROVEDINVISIBILITY)
+	See([PC])
+	!CheckStatGT([PC],0,WIZARD_SPELL_TURNING)
+	!CheckStatGT([PC],0,WIZARD_SPELL_TRAP)
+	!CheckStatGT([PC],0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT([PC],0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT([PC],80)
+THEN
+	RESPONSE #100
+		Spell([PC],CLERIC_CURE_MEDIUM_WOUNDS)  // SPPR315.SPL (Cure Medium Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_MEDIUM_WOUNDS)  // SPPR315.SPL (Cure Medium Wounds)
+	See(SecondNearest([PC]))
+	!StateCheck(SecondNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(SecondNearest([PC]))
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(SecondNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(SecondNearest([PC]),80)
+THEN
+	RESPONSE #100
+		Spell(SecondNearest([PC]),CLERIC_CURE_MEDIUM_WOUNDS)  // SPPR315.SPL (Cure Medium Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_MEDIUM_WOUNDS)  // SPPR315.SPL (Cure Medium Wounds)
+	See(ThirdNearest([PC]))
+	!StateCheck(ThirdNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(ThirdNearest([PC]))
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(ThirdNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(ThirdNearest([PC]),80)
+THEN
+	RESPONSE #100
+		Spell(ThirdNearest([PC]),CLERIC_CURE_MEDIUM_WOUNDS)  // SPPR315.SPL (Cure Medium Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_MEDIUM_WOUNDS)  // SPPR315.SPL (Cure Medium Wounds)
+	See(FourthNearest([PC]))
+	!StateCheck(FourthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(FourthNearest([PC]))
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(FourthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(FourthNearest([PC]),80)
+THEN
+	RESPONSE #100
+		Spell(FourthNearest([PC]),CLERIC_CURE_MEDIUM_WOUNDS)  // SPPR315.SPL (Cure Medium Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_MEDIUM_WOUNDS)  // SPPR315.SPL (Cure Medium Wounds)
+	See(FifthNearest([PC]))
+	!StateCheck(FifthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(FifthNearest([PC]))
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(FifthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(FifthNearest([PC]),80)
+THEN
+	RESPONSE #100
+		Spell(FifthNearest([PC]),CLERIC_CURE_MEDIUM_WOUNDS)  // SPPR315.SPL (Cure Medium Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_MEDIUM_WOUNDS)  // SPPR315.SPL (Cure Medium Wounds)
+	See(SixthNearest([PC]))
+	!StateCheck(SixthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(SixthNearest([PC]))
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(SixthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(SixthNearest([PC]),80)
+THEN
+	RESPONSE #100
+		Spell(SixthNearest([PC]),CLERIC_CURE_MEDIUM_WOUNDS)  // SPPR315.SPL (Cure Medium Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_SERIOUS_WOUNDS)  // SPPR401.SPL (Cure Serious Wounds)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Myself([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Myself([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(Myself([PC]),70)
+THEN
+	RESPONSE #100
+		Spell(Myself([PC]),CLERIC_CURE_SERIOUS_WOUNDS)  // SPPR401.SPL (Cure Serious Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_SERIOUS_WOUNDS)  // SPPR401.SPL (Cure Serious Wounds)
+	See([PC])
+	!StateCheck([PC],STATE_IMPROVEDINVISIBILITY)
+	See([PC])
+	!CheckStatGT([PC],0,WIZARD_SPELL_TURNING)
+	!CheckStatGT([PC],0,WIZARD_SPELL_TRAP)
+	!CheckStatGT([PC],0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT([PC],0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT([PC],80)
+THEN
+	RESPONSE #100
+		Spell([PC],CLERIC_CURE_SERIOUS_WOUNDS)  // SPPR401.SPL (Cure Serious Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_SERIOUS_WOUNDS)  // SPPR401.SPL (Cure Serious Wounds)
+	See(SecondNearest([PC]))
+	!StateCheck(SecondNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(SecondNearest([PC]))
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(SecondNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(SecondNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(SecondNearest([PC]),70)
+THEN
+	RESPONSE #100
+		Spell(SecondNearest([PC]),CLERIC_CURE_SERIOUS_WOUNDS)  // SPPR401.SPL (Cure Serious Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_SERIOUS_WOUNDS)  // SPPR401.SPL (Cure Serious Wounds)
+	See(ThirdNearest([PC]))
+	!StateCheck(ThirdNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(ThirdNearest([PC]))
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(ThirdNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(ThirdNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(ThirdNearest([PC]),70)
+THEN
+	RESPONSE #100
+		Spell(ThirdNearest([PC]),CLERIC_CURE_SERIOUS_WOUNDS)  // SPPR401.SPL (Cure Serious Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_SERIOUS_WOUNDS)  // SPPR401.SPL (Cure Serious Wounds)
+	See(FourthNearest([PC]))
+	!StateCheck(FourthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(FourthNearest([PC]))
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(FourthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(FourthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(FourthNearest([PC]),70)
+THEN
+	RESPONSE #100
+		Spell(FourthNearest([PC]),CLERIC_CURE_SERIOUS_WOUNDS)  // SPPR401.SPL (Cure Serious Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_SERIOUS_WOUNDS)  // SPPR401.SPL (Cure Serious Wounds)
+	See(FifthNearest([PC]))
+	!StateCheck(FifthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(FifthNearest([PC]))
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(FifthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(FifthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(FifthNearest([PC]),70)
+THEN
+	RESPONSE #100
+		Spell(FifthNearest([PC]),CLERIC_CURE_SERIOUS_WOUNDS)  // SPPR401.SPL (Cure Serious Wounds)
+END
+
+IF
+	ActionListEmpty()
+	GlobalGT("Healing","LOCALS",0)
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CURE_SERIOUS_WOUNDS)  // SPPR401.SPL (Cure Serious Wounds)
+	See(SixthNearest([PC]))
+	!StateCheck(SixthNearest([PC]),STATE_IMPROVEDINVISIBILITY)
+	See(SixthNearest([PC]))
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(SixthNearest([PC]),0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(SixthNearest([PC]),0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	HPPercentLT(SixthNearest([PC]),70)
+THEN
+	RESPONSE #100
+		Spell(SixthNearest([PC]),CLERIC_CURE_SERIOUS_WOUNDS)  // SPPR401.SPL (Cure Serious Wounds)
+END
+
+IF
+	GlobalGT("Healing","LOCALS",0)
+	ActionListEmpty()
+THEN
+	RESPONSE #100
+		SetGlobal("Healing","LOCALS",0)
+		DisplayStringHead(Myself,11973)  // done
+END
+
+IF
+	Global("VeryLongDurationBuffs","LOCALS",0)
+	HotKey(X)
+THEN
+	RESPONSE #100
+		SetGlobal("VeryLongDurationBuffs","LOCALS",1)
+END
+
+IF
+	Global("VeryLongDurationBuffs","LOCALS",1)
+	HotKey(X)
+THEN
+	RESPONSE #100
+		SetGlobal("VeryLongDurationBuffs","LOCALS",0)
+		DisplayStringHead(Myself,11973)  // done
+END
+
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_STONE_SKIN)  // SPWI408.SPL (Stoneskin)
+	CheckStat(Myself,0,STONESKINS)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_STONE_SKIN)  // SPWI408.SPL (Stoneskin)
+END
+
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpellRES("RAWI408")  // (DOF Stoneskin)
+	CheckStat(Myself,0,STONESKINS)
+THEN
+	RESPONSE #100
+		SpellRES("RAWI408",Myself)  // (DOF Stoneskin)
+END
+
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_IRONSKIN)  // SPPR506.SPL (Iron Skins)
+	CheckStat(Myself,0,STONESKINS)
+THEN
+	RESPONSE #100
+		Spell(Myself,CLERIC_IRONSKIN)  // SPPR506.SPL (Iron Skins)
+END
+
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_MIND_BLANK)  // SPWI806.SPL (Mind Blank)
+	!CheckSpellState(Myself,CHAOTIC_COMMANDS)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_MIND_BLANK)  // SPWI806.SPL (Mind Blank)
+END
+
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpellRES("RATEMP3")  // Heroes' Feast (Tempus)
+THEN
+	RESPONSE #100
+		SpellRES("RATEMP3",Myself)  // 
+END
+
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpellRES("RAYOND6")  // Heroes' Feast (Yondalla)
+THEN
+	RESPONSE #100
+		SpellRES("RAYOND6",Myself)  // 
+END
+
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!StateCheck(Myself,STATE_BLESS)
+	HasItem("RAFeast",Myself)  // Blessed Food
+THEN
+	RESPONSE #100
+		UseItem("RAFeast",Myself)  // Blessed Food
+END
+
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+    StateCheck(Myself,STATE_BLESS)	
+	HasItem("RAFeast",Myself)  // Blessed Food
+	!HasItem("RAFeast",Player1)  // Blessed Food
+	!StateCheck(Player1,STATE_BLESS)
+THEN
+	RESPONSE #100
+			GiveItem("RAFeast",Player1)  // Blessed Food
+END
+
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+    StateCheck(Myself,STATE_BLESS)
+	HasItem("RAFeast",Myself)  // Blessed Food
+	!HasItem("RAFeast",Player2)  // Blessed Food
+	!StateCheck(Player2,STATE_BLESS)
+THEN
+	RESPONSE #100
+			GiveItem("RAFeast",Player2)  // Blessed Food
+END
+
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+    StateCheck(Myself,STATE_BLESS)
+	HasItem("RAFeast",Myself)  // Blessed Food
+	!HasItem("RAFeast",Player3)  // Blessed Food
+	!StateCheck(Player3,STATE_BLESS)
+THEN
+	RESPONSE #100
+			GiveItem("RAFeast",Player3)  // Blessed Food
+END
+
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+    StateCheck(Myself,STATE_BLESS)
+	HasItem("RAFeast",Myself)  // Blessed Food
+	!HasItem("RAFeast",Player4)  // Blessed Food
+	!StateCheck(Player4,STATE_BLESS)
+THEN
+	RESPONSE #100
+			GiveItem("RAFeast",Player4)  // Blessed Food
+END
+
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+    StateCheck(Myself,STATE_BLESS)
+	HasItem("RAFeast",Myself)  // Blessed Food
+	!HasItem("RAFeast",Player5)  // Blessed Food
+	!StateCheck(Player5,STATE_BLESS)
+THEN
+	RESPONSE #100
+			GiveItem("RAFeast",Player5)  // Blessed Food
+END
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+    StateCheck(Myself,STATE_BLESS)
+	HasItem("RAFeast",Myself)  // Blessed Food
+	!HasItem("RAFeast",Player6)  // Blessed Food
+	!StateCheck(Player6,STATE_BLESS)
+THEN
+	RESPONSE #100
+			GiveItem("RAFeast",Player6)  // Blessed Food
+END
+
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_ARMOR)  // SPWI102.SPL (Armor)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_ARMOR)  // SPWI102.SPL (Armor)
+		SetGlobal("VeryLongDurationBuffs","LOCALS",0)
+		DisplayStringHead(Myself,11973)  // done
+END
+
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+THEN
+	RESPONSE #100
+		SetGlobal("VeryLongDurationBuffs","LOCALS",0)
+		DisplayStringHead(Myself,11973)  // done
+END
+
+IF
+	Global("LongDurationBuffs","LOCALS",0)
+	HotKey(C)
+THEN
+	RESPONSE #100
+		SetGlobal("LongDurationBuffs","LOCALS",1)
+END
+
+IF
+	Global("LongDurationBuffs","LOCALS",1)
+	HotKey(C)
+THEN
+	RESPONSE #100
+		SetGlobal("LongDurationBuffs","LOCALS",0)
+		DisplayStringHead(Myself,11973)  // done
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_IMPERVIOUS_SANCTITY_OF_MIND)  // SPPR735.SPL (Impervious Sanctity of Mind)
+THEN
+	RESPONSE #100
+		Spell(Myself,CLERIC_IMPERVIOUS_SANCTITY_OF_MIND)  // SPPR735.SPL (Impervious Sanctity of Mind)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpellRES("RAARVO2")  // DoF Arvoreen Strength
+	CheckStatLT(Myself,18,STR)
+THEN
+	RESPONSE #100
+		SpellRES("RAARVO2",Myself)
+END
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_STRENGTH)  // SPWI214.SPL (Strength)
+	CheckStatLT(Myself,18,STR)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_STRENGTH)  // SPWI214.SPL (Strength)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_STRENGTH)  // SPWI214.SPL (Strength)
+	See(Player1)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player1,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player1,18,STR)
+THEN
+	RESPONSE #100
+		Spell(Player1,WIZARD_STRENGTH)  // SPWI214.SPL (Strength)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_STRENGTH)  // SPWI214.SPL (Strength)
+	See(Player2)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player2,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player2,18,STR)
+THEN
+	RESPONSE #100
+		Spell(Player2,WIZARD_STRENGTH)  // SPWI214.SPL (Strength)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_STRENGTH)  // SPWI214.SPL (Strength)
+	See(Player3)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player3,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player3,18,STR)
+THEN
+	RESPONSE #100
+		Spell(Player3,WIZARD_STRENGTH)  // SPWI214.SPL (Strength)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_STRENGTH)  // SPWI214.SPL (Strength)
+	See(Player4)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player4,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player4,18,STR)
+THEN
+	RESPONSE #100
+		Spell(Player4,WIZARD_STRENGTH)  // SPWI214.SPL (Strength)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_STRENGTH)  // SPWI214.SPL (Strength)
+	See(Player5)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player5,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player5,18,STR)
+THEN
+	RESPONSE #100
+		Spell(Player5,WIZARD_STRENGTH)  // SPWI214.SPL (Strength)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_STRENGTH)  // SPWI214.SPL (Strength)
+	See(Player6)
+	!StateCheck(Player6,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player6,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player6,18,STR)
+THEN
+	RESPONSE #100
+		Spell(Player6,WIZARD_STRENGTH)  // SPWI214.SPL (Strength)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	!CheckStat(Myself,1,PROTECTION_FROM_EVIL)
+	HaveSpell(CLERIC_PROTECTION_FROM_EVIL_10_FOOT)  // SPPR408.SPL (Protection From Evil, 10' Radius)
+THEN
+	RESPONSE #100
+		Spell(Myself,CLERIC_PROTECTION_FROM_EVIL_10_FOOT)  // SPPR408.SPL (Protection From Evil, 10' Radius)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CHAOTIC_COMMANDS)  // SPPR508.SPL (Chaotic Commands)
+	!CheckSpellState(Myself,CHAOTIC_COMMANDS)
+THEN
+	RESPONSE #100
+		Spell(Myself,CLERIC_CHAOTIC_COMMANDS)  // SPPR508.SPL (Chaotic Commands)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CHAOTIC_COMMANDS)  // SPPR508.SPL (Chaotic Commands)
+	See(Player1)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!CheckSpellState(Player1,CHAOTIC_COMMANDS)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player1,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player1,CLERIC_CHAOTIC_COMMANDS)  // SPPR508.SPL (Chaotic Commands)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CHAOTIC_COMMANDS)  // SPPR508.SPL (Chaotic Commands)
+	See(Player2)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!CheckSpellState(Player2,CHAOTIC_COMMANDS)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player2,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player2,CLERIC_CHAOTIC_COMMANDS)  // SPPR508.SPL (Chaotic Commands)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CHAOTIC_COMMANDS)  // SPPR508.SPL (Chaotic Commands)
+	See(Player3)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!CheckSpellState(Player3,CHAOTIC_COMMANDS)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player3,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player3,CLERIC_CHAOTIC_COMMANDS)  // SPPR508.SPL (Chaotic Commands)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CHAOTIC_COMMANDS)  // SPPR508.SPL (Chaotic Commands)
+	See(Player4)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!CheckSpellState(Player4,CHAOTIC_COMMANDS)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player4,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player4,CLERIC_CHAOTIC_COMMANDS)  // SPPR508.SPL (Chaotic Commands)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CHAOTIC_COMMANDS)  // SPPR508.SPL (Chaotic Commands)
+	See(Player5)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!CheckSpellState(Player5,CHAOTIC_COMMANDS)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player5,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player5,CLERIC_CHAOTIC_COMMANDS)  // SPPR508.SPL (Chaotic Commands)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_CHAOTIC_COMMANDS)  // SPPR508.SPL (Chaotic Commands)
+	See(Player6)
+	!StateCheck(Player6,STATE_IMPROVEDINVISIBILITY)
+	!CheckSpellState(Player6,CHAOTIC_COMMANDS)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player6,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player6,CLERIC_CHAOTIC_COMMANDS)  // SPPR508.SPL (Chaotic Commands)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_DEATH_WARD)  // SPPR409.SPL (Death Ward)
+	!CheckSpellState(Myself,DEATH_WARD)
+THEN
+	RESPONSE #100
+		Spell(Myself,CLERIC_DEATH_WARD)  // SPPR409.SPL (Death Ward)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_DEATH_WARD)  // SPPR409.SPL (Death Ward)
+	See(Player1)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!CheckSpellState(Player1,DEATH_WARD)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player1,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player1,CLERIC_DEATH_WARD)  // SPPR409.SPL (Death Ward)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_DEATH_WARD)  // SPPR409.SPL (Death Ward)
+	See(Player2)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!CheckSpellState(Player2,DEATH_WARD)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player2,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player2,CLERIC_DEATH_WARD)  // SPPR409.SPL (Death Ward)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_DEATH_WARD)  // SPPR409.SPL (Death Ward)
+	See(Player3)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!CheckSpellState(Player3,DEATH_WARD)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player3,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player3,CLERIC_DEATH_WARD)  // SPPR409.SPL (Death Ward)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_DEATH_WARD)  // SPPR409.SPL (Death Ward)
+	See(Player4)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!CheckSpellState(Player4,DEATH_WARD)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player4,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player4,CLERIC_DEATH_WARD)  // SPPR409.SPL (Death Ward)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_DEATH_WARD)  // SPPR409.SPL (Death Ward)
+	See(Player5)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!CheckSpellState(Player5,DEATH_WARD)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player5,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player5,CLERIC_DEATH_WARD)  // SPPR409.SPL (Death Ward)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_DEATH_WARD)  // SPPR409.SPL (Death Ward)
+	See(Player6)
+	!StateCheck(Player6,STATE_IMPROVEDINVISIBILITY)
+	!CheckSpellState(Player6,DEATH_WARD)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player6,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player6,CLERIC_DEATH_WARD)  // SPPR409.SPL (Death Ward)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_MAGIC_ENERGY)  // SPWI606.SPL (Protection From Magic Energy)
+	CheckStatLT(Myself,80,MAGICDAMAGERESISTANCE)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_PROTECTION_FROM_MAGIC_ENERGY)  // SPWI606.SPL (Protection From Magic Energy)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_MAGIC_ENERGY)  // SPWI606.SPL (Protection From Magic Energy)
+	See(Player1)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	CheckStatLT(Player1,80,MAGICDAMAGERESISTANCE)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player1,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player1,WIZARD_PROTECTION_FROM_MAGIC_ENERGY)  // SPWI606.SPL (Protection From Magic Energy)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_MAGIC_ENERGY)  // SPWI606.SPL (Protection From Magic Energy)
+	See(Player2)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	CheckStatLT(Player2,80,MAGICDAMAGERESISTANCE)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player2,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player2,WIZARD_PROTECTION_FROM_MAGIC_ENERGY)  // SPWI606.SPL (Protection From Magic Energy)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_MAGIC_ENERGY)  // SPWI606.SPL (Protection From Magic Energy)
+	See(Player3)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	CheckStatLT(Player3,80,MAGICDAMAGERESISTANCE)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player3,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player3,WIZARD_PROTECTION_FROM_MAGIC_ENERGY)  // SPWI606.SPL (Protection From Magic Energy)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_MAGIC_ENERGY)  // SPWI606.SPL (Protection From Magic Energy)
+	See(Player4)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	CheckStatLT(Player4,80,MAGICDAMAGERESISTANCE)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player4,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player4,WIZARD_PROTECTION_FROM_MAGIC_ENERGY)  // SPWI606.SPL (Protection From Magic Energy)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_MAGIC_ENERGY)  // SPWI606.SPL (Protection From Magic Energy)
+	See(Player5)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	CheckStatLT(Player5,80,MAGICDAMAGERESISTANCE)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player5,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player5,WIZARD_PROTECTION_FROM_MAGIC_ENERGY)  // SPWI606.SPL (Protection From Magic Energy)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_MAGIC_ENERGY)  // SPWI606.SPL (Protection From Magic Energy)
+	See(Player6)
+	!StateCheck(Player6,STATE_IMPROVEDINVISIBILITY)
+	CheckStatLT(Player6,80,MAGICDAMAGERESISTANCE)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player6,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Player6,WIZARD_PROTECTION_FROM_MAGIC_ENERGY)  // SPWI606.SPL (Protection From Magic Energy)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_FIRE)  // SPWI319.SPL (Protection From Fire)
+	CheckStatLT(Myself,100,RESISTFIRE)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_PROTECTION_FROM_FIRE)  // SPWI319.SPL (Protection From Fire)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_FIRE)  // SPWI319.SPL (Protection From Fire)
+	See(Player1)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player1,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player1,100,RESISTFIRE)
+THEN
+	RESPONSE #100
+		Spell(Player1,WIZARD_PROTECTION_FROM_FIRE)  // SPWI319.SPL (Protection From Fire)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_FIRE)  // SPWI319.SPL (Protection From Fire)
+	See(Player2)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player2,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player2,100,RESISTFIRE)
+THEN
+	RESPONSE #100
+		Spell(Player2,WIZARD_PROTECTION_FROM_FIRE)  // SPWI319.SPL (Protection From Fire)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_FIRE)  // SPWI319.SPL (Protection From Fire)
+	See(Player3)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player3,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player3,100,RESISTFIRE)
+THEN
+	RESPONSE #100
+		Spell(Player3,WIZARD_PROTECTION_FROM_FIRE)  // SPWI319.SPL (Protection From Fire)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_FIRE)  // SPWI319.SPL (Protection From Fire)
+	See(Player4)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player4,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player4,100,RESISTFIRE)
+THEN
+	RESPONSE #100
+		Spell(Player4,WIZARD_PROTECTION_FROM_FIRE)  // SPWI319.SPL (Protection From Fire)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_FIRE)  // SPWI319.SPL (Protection From Fire)
+	See(Player5)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player5,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player5,100,RESISTFIRE)
+THEN
+	RESPONSE #100
+		Spell(Player5,WIZARD_PROTECTION_FROM_FIRE)  // SPWI319.SPL (Protection From Fire)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_FIRE)  // SPWI319.SPL (Protection From Fire)
+	See(Player6)
+	!StateCheck(Player6,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player6,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player6,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player6,100,RESISTFIRE)
+THEN
+	RESPONSE #100
+		Spell(Player6,WIZARD_PROTECTION_FROM_FIRE)  // SPWI319.SPL (Protection From Fire)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_COLD)  // SPWI320.SPL (Protection From Cold)
+	CheckStatLT(Myself,100,RESISTCOLD)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_PROTECTION_FROM_COLD)  // SPWI320.SPL (Protection From Cold)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_COLD)  // SPWI320.SPL (Protection From Cold)
+	See(Player1)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player1,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player1,100,RESISTCOLD)
+THEN
+	RESPONSE #100
+		Spell(Player1,WIZARD_PROTECTION_FROM_COLD)  // SPWI320.SPL (Protection From Cold)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_COLD)  // SPWI320.SPL (Protection From Cold)
+	See(Player2)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player2,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player2,100,RESISTCOLD)
+THEN
+	RESPONSE #100
+		Spell(Player2,WIZARD_PROTECTION_FROM_COLD)  // SPWI320.SPL (Protection From Cold)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_COLD)  // SPWI320.SPL (Protection From Cold)
+	See(Player3)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player3,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player3,100,RESISTCOLD)
+THEN
+	RESPONSE #100
+		Spell(Player3,WIZARD_PROTECTION_FROM_COLD)  // SPWI320.SPL (Protection From Cold)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_COLD)  // SPWI320.SPL (Protection From Cold)
+	See(Player4)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player4,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player4,100,RESISTCOLD)
+THEN
+	RESPONSE #100
+		Spell(Player4,WIZARD_PROTECTION_FROM_COLD)  // SPWI320.SPL (Protection From Cold)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_COLD)  // SPWI320.SPL (Protection From Cold)
+	See(Player5)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player5,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player5,100,RESISTCOLD)
+THEN
+	RESPONSE #100
+		Spell(Player5,WIZARD_PROTECTION_FROM_COLD)  // SPWI320.SPL (Protection From Cold)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_COLD)  // SPWI320.SPL (Protection From Cold)
+	See(Player6)
+	!StateCheck(Player6,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player6,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player6,100,RESISTCOLD)
+THEN
+	RESPONSE #100
+		Spell(Player6,WIZARD_PROTECTION_FROM_COLD)  // SPWI320.SPL (Protection From Cold)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_ACID)  // SPWI517.SPL (Protection From Acid)
+	CheckStatLT(Myself,100,RESISTACID)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_PROTECTION_FROM_ACID)  // SPWI517.SPL (Protection From Acid)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpellRES("RAWI517")  // SPWI517.SPL (Protection From Acid)
+	CheckStatLT(Myself,100,RESISTACID)
+THEN
+	RESPONSE #100
+		SpellRES("RAWI517",Myself)  // SPWI517.SPL (Protection From Acid)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_ACID)  // SPWI517.SPL (Protection From Acid)
+	See(Player1)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player1,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player1,100,RESISTACID)
+THEN
+	RESPONSE #100
+		Spell(Player1,WIZARD_PROTECTION_FROM_ACID)  // SPWI517.SPL (Protection From Acid)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_ACID)  // SPWI517.SPL (Protection From Acid)
+	See(Player2)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player2,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player2,100,RESISTACID)
+THEN
+	RESPONSE #100
+		Spell(Player2,WIZARD_PROTECTION_FROM_ACID)  // SPWI517.SPL (Protection From Acid)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_ACID)  // SPWI517.SPL (Protection From Acid)
+	See(Player3)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player3,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player3,100,RESISTACID)
+THEN
+	RESPONSE #100
+		Spell(Player3,WIZARD_PROTECTION_FROM_ACID)  // SPWI517.SPL (Protection From Acid)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_ACID)  // SPWI517.SPL (Protection From Acid)
+	See(Player4)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player4,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player4,100,RESISTACID)
+THEN
+	RESPONSE #100
+		Spell(Player4,WIZARD_PROTECTION_FROM_ACID)  // SPWI517.SPL (Protection From Acid)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_ACID)  // SPWI517.SPL (Protection From Acid)
+	See(Player5)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player5,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player5,100,RESISTACID)
+THEN
+	RESPONSE #100
+		Spell(Player5,WIZARD_PROTECTION_FROM_ACID)  // SPWI517.SPL (Protection From Acid)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_ACID)  // SPWI517.SPL (Protection From Acid)
+	See(Player6)
+	!StateCheck(Player6,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player6,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player6,100,RESISTACID)
+THEN
+	RESPONSE #100
+		Spell(Player6,WIZARD_PROTECTION_FROM_ACID)  // SPWI517.SPL (Protection From Acid)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_ELECTRICITY)  // SPWI512.SPL (Protection From Electricity)
+	CheckStatLT(Myself,100,RESISTELECTRICITY)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_PROTECTION_FROM_ELECTRICITY)  // SPWI512.SPL (Protection From Electricity)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_ELECTRICITY)  // SPWI512.SPL (Protection From Electricity)
+	See(Player1)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player1,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player1,100,RESISTELECTRICITY)
+THEN
+	RESPONSE #100
+		Spell(Player1,WIZARD_PROTECTION_FROM_ELECTRICITY)  // SPWI512.SPL (Protection From Electricity)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_ELECTRICITY)  // SPWI512.SPL (Protection From Electricity)
+	See(Player2)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player2,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player2,100,RESISTELECTRICITY)
+THEN
+	RESPONSE #100
+		Spell(Player2,WIZARD_PROTECTION_FROM_ELECTRICITY)  // SPWI512.SPL (Protection From Electricity)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_ELECTRICITY)  // SPWI512.SPL (Protection From Electricity)
+	See(Player3)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player3,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player3,100,RESISTELECTRICITY)
+THEN
+	RESPONSE #100
+		Spell(Player3,WIZARD_PROTECTION_FROM_ELECTRICITY)  // SPWI512.SPL (Protection From Electricity)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_ELECTRICITY)  // SPWI512.SPL (Protection From Electricity)
+	See(Player4)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player4,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player4,100,RESISTELECTRICITY)
+THEN
+	RESPONSE #100
+		Spell(Player4,WIZARD_PROTECTION_FROM_ELECTRICITY)  // SPWI512.SPL (Protection From Electricity)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_ELECTRICITY)  // SPWI512.SPL (Protection From Electricity)
+	See(Player5)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player5,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player5,100,RESISTELECTRICITY)
+THEN
+	RESPONSE #100
+		Spell(Player5,WIZARD_PROTECTION_FROM_ELECTRICITY)  // SPWI512.SPL (Protection From Electricity)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_PROTECTION_FROM_ELECTRICITY)  // SPWI512.SPL (Protection From Electricity)
+	See(Player6)
+	!StateCheck(Player6,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player6,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player6,100,RESISTELECTRICITY)
+THEN
+	RESPONSE #100
+		Spell(Player6,WIZARD_PROTECTION_FROM_ELECTRICITY)  // SPWI512.SPL (Protection From Electricity)
+END
+
+IF
+	GlobalGT("LongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+THEN
+	RESPONSE #100
+		SetGlobal("LongDurationBuffs","LOCALS",0)
+		DisplayStringHead(Myself,11973)  // done
+END
+
+IF
+	Global("MediumDurationBuffs","LOCALS",0)
+	HotKey(V)
+THEN
+	RESPONSE #100
+		SetGlobal("MediumDurationBuffs","LOCALS",1)
+END
+
+IF
+	Global("MediumDurationBuffs","LOCALS",1)
+	HotKey(V)
+THEN
+	RESPONSE #100
+		SetGlobal("MediumDurationBuffs","LOCALS",0)
+		DisplayStringHead(Myself,11973)  // done
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_PROTECTION_FROM_LIGHTNING)  // SPPR407.SPL (Protection From Lightning)
+	CheckStatLT(Myself,80,RESISTELECTRICITY)
+THEN
+	RESPONSE #100
+		Spell(Myself,CLERIC_PROTECTION_FROM_LIGHTNING)  // SPPR407.SPL (Protection From Lightning)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_PROTECTION_FROM_LIGHTNING)  // SPPR407.SPL (Protection From Lightning)
+	See(Player1)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player1,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player1,80,RESISTELECTRICITY)
+THEN
+	RESPONSE #100
+		Spell(Player1,CLERIC_PROTECTION_FROM_LIGHTNING)  // SPPR407.SPL (Protection From Lightning)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_PROTECTION_FROM_LIGHTNING)  // SPPR407.SPL (Protection From Lightning)
+	See(Player2)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player2,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player2,80,RESISTELECTRICITY)
+THEN
+	RESPONSE #100
+		Spell(Player2,CLERIC_PROTECTION_FROM_LIGHTNING)  // SPPR407.SPL (Protection From Lightning)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_PROTECTION_FROM_LIGHTNING)  // SPPR407.SPL (Protection From Lightning)
+	See(Player3)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player3,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player3,80,RESISTELECTRICITY)
+THEN
+	RESPONSE #100
+		Spell(Player3,CLERIC_PROTECTION_FROM_LIGHTNING)  // SPPR407.SPL (Protection From Lightning)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_PROTECTION_FROM_LIGHTNING)  // SPPR407.SPL (Protection From Lightning)
+	See(Player4)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player4,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player4,80,RESISTELECTRICITY)
+THEN
+	RESPONSE #100
+		Spell(Player4,CLERIC_PROTECTION_FROM_LIGHTNING)  // SPPR407.SPL (Protection From Lightning)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_PROTECTION_FROM_LIGHTNING)  // SPPR407.SPL (Protection From Lightning)
+	See(Player5)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_DEFLECTION)
+	CheckStatLT(Player5,80,RESISTELECTRICITY)
+THEN
+	RESPONSE #100
+		Spell(Player5,CLERIC_PROTECTION_FROM_LIGHTNING)  // SPPR407.SPL (Protection From Lightning)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_PROTECTION_FROM_LIGHTNING)  // SPPR407.SPL (Protection From Lightning)
+	See(Player6)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player6,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player6,80,RESISTELECTRICITY)
+THEN
+	RESPONSE #100
+		Spell(Player6,CLERIC_PROTECTION_FROM_LIGHTNING)  // SPPR407.SPL (Protection From Lightning)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_SPELL_SHIELD)  // SPWI519.SPL (Spell Shield)
+	!CheckSpellState(Myself,SPELL_SHIELD)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_SPELL_SHIELD)  // SPWI519.SPL (Spell Shield)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_BLUR)  // SPWI201.SPL (Blur)
+	!StateCheck(Myself,STATE_BLUR)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_BLUR)  // SPWI201.SPL (Blur)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpellRES("RAWI201")  // SPWI201.SPL (Blur)
+	!StateCheck(Myself,STATE_BLUR)
+THEN
+	RESPONSE #100
+		SpellRES("RAWI201",Myself)  // SPWI201.SPL (Blur)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_REMOVE_FEAR)  // SPPR108.SPL (Remove Fear)
+	!CheckSpellState(Myself,RESIST_FEAR)
+THEN
+	RESPONSE #100
+		Spell(Myself,CLERIC_REMOVE_FEAR)  // SPPR108.SPL (Remove Fear)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_REMOVE_FEAR)  // SPPR108.SPL (Remove Fear)
+	See(Player1)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player1,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	!CheckSpellState(Player1,RESIST_FEAR)
+THEN
+	RESPONSE #100
+		Spell(Player1,CLERIC_REMOVE_FEAR)  // SPPR108.SPL (Remove Fear)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_REMOVE_FEAR)  // SPPR108.SPL (Remove Fear)
+	See(Player2)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player2,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	!CheckSpellState(Player2,RESIST_FEAR)
+THEN
+	RESPONSE #100
+		Spell(Player2,CLERIC_REMOVE_FEAR)  // SPPR108.SPL (Remove Fear)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_REMOVE_FEAR)  // SPPR108.SPL (Remove Fear)
+	See(Player3)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player3,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	!CheckSpellState(Player3,RESIST_FEAR)
+THEN
+	RESPONSE #100
+		Spell(Player3,CLERIC_REMOVE_FEAR)  // SPPR108.SPL (Remove Fear)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_REMOVE_FEAR)  // SPPR108.SPL (Remove Fear)
+	See(Player4)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player4,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	!CheckSpellState(Player4,RESIST_FEAR)
+THEN
+	RESPONSE #100
+		Spell(Player4,CLERIC_REMOVE_FEAR)  // SPPR108.SPL (Remove Fear)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_REMOVE_FEAR)  // SPPR108.SPL (Remove Fear)
+	See(Player5)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player5,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	!CheckSpellState(Player5,RESIST_FEAR)
+THEN
+	RESPONSE #100
+		Spell(Player5,CLERIC_REMOVE_FEAR)  // SPPR108.SPL (Remove Fear)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_REMOVE_FEAR)  // SPPR108.SPL (Remove Fear)
+	See(Player6)
+	!StateCheck(Player6,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player6,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	!CheckSpellState(Player6,RESIST_FEAR)
+THEN
+	RESPONSE #100
+		Spell(Player6,CLERIC_REMOVE_FEAR)  // SPPR108.SPL (Remove Fear)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_SHIELD)  // SPWI114.SPL (Shield)
+	!CheckSpellState(Myself,WIZARD_SHIELD)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_SHIELD)  // SPWI114.SPL (Shield)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpellRES("RAWI114")  // SPWI114.SPL (Shield)
+	!CheckSpellState(Myself,WIZARD_SHIELD)
+THEN
+	RESPONSE #100
+		SpellRES("RAWI114",Myself)  // SPWI114.SPL (Shield)
+END
+
+IF
+	Global("SpiritArmorCast","LOCALS",0)
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_SPIRIT_ARMOR)  // SPWI414.SPL (Spirit Armor)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_SPIRIT_ARMOR)  // SPWI414.SPL (Spirit Armor)
+		SetGlobal("SpiritArmorCast","LOCALS",1)
+END
+
+IF
+	Global("SpiritArmorCast","LOCALS",0)
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpellRES("RAWI414")  // SPWI414.SPL (Spirit Armor)
+THEN
+	RESPONSE #100
+		SpellRES("rawi414",Myself)  // SPWI414.SPL (Spirit Armor)
+		SetGlobal("SpiritArmorCast","LOCALS",1)
+END
+
+IF
+	GlobalGT("MediumDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+THEN
+	RESPONSE #100
+		SetGlobal("MediumDurationBuffs","LOCALS",0)
+		SetGlobal("SpiritArmorCast","LOCALS",0)
+		DisplayStringHead(Myself,11973)  // done
+END
+
+IF
+	Global("ShortDurationBuffs","LOCALS",0)
+	HotKey(B)
+THEN
+	RESPONSE #100
+		SetGlobal("ShortDurationBuffs","LOCALS",1)
+END
+
+IF
+	Global("ShortDurationBuffs","LOCALS",1)
+	HotKey(B)
+THEN
+	RESPONSE #100
+		SetGlobal("ShortDurationBuffs","LOCALS",0)
+		DisplayStringHead(Myself,11973)  // done
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_PROTECTION_FROM_FIRE)  // SPPR306.SPL (Protection From Fire)
+	CheckStatLT(Myself,100,RESISTFIRE)
+THEN
+	RESPONSE #100
+		Spell(Myself,CLERIC_PROTECTION_FROM_FIRE)  // SPPR306.SPL (Protection From Fire)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_PROTECTION_FROM_FIRE)  // SPPR306.SPL (Protection From Fire)
+	See(Player1)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player1,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player1,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player1,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player1,100,RESISTFIRE)
+THEN
+	RESPONSE #100
+		Spell(Player1,CLERIC_PROTECTION_FROM_FIRE)  // SPPR306.SPL (Protection From Fire)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_PROTECTION_FROM_FIRE)  // SPPR306.SPL (Protection From Fire)
+	See(Player2)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player2,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player2,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player2,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player2,100,RESISTFIRE)
+THEN
+	RESPONSE #100
+		Spell(Player2,CLERIC_PROTECTION_FROM_FIRE)  // SPPR306.SPL (Protection From Fire)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_PROTECTION_FROM_FIRE)  // SPPR306.SPL (Protection From Fire)
+	See(Player3)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player3,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player3,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player3,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player3,100,RESISTFIRE)
+THEN
+	RESPONSE #100
+		Spell(Player3,CLERIC_PROTECTION_FROM_FIRE)  // SPPR306.SPL (Protection From Fire)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_PROTECTION_FROM_FIRE)  // SPPR306.SPL (Protection From Fire)
+	See(Player4)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player4,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player4,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player4,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player4,100,RESISTFIRE)
+THEN
+	RESPONSE #100
+		Spell(Player4,CLERIC_PROTECTION_FROM_FIRE)  // SPPR306.SPL (Protection From Fire)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_PROTECTION_FROM_FIRE)  // SPPR306.SPL (Protection From Fire)
+	See(Player5)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player5,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player5,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player5,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player5,100,RESISTFIRE)
+THEN
+	RESPONSE #100
+		Spell(Player5,CLERIC_PROTECTION_FROM_FIRE)  // SPPR306.SPL (Protection From Fire)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_PROTECTION_FROM_FIRE)  // SPPR306.SPL (Protection From Fire)
+	See(Player6)
+	!StateCheck(Player6,STATE_IMPROVEDINVISIBILITY)
+	!StateCheck(Player6,STATE_IMPROVEDINVISIBILITY)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Player6,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Player6,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+	CheckStatLT(Player6,100,RESISTFIRE)
+THEN
+	RESPONSE #100
+		Spell(Player6,CLERIC_PROTECTION_FROM_FIRE)  // SPPR306.SPL (Protection From Fire)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	CheckStatLT(Myself,10,LEVEL)
+	CheckStatLT(Myself,10,LEVEL2)
+	CheckStatLT(Myself,10,LEVEL3)
+	HaveSpell(CLERIC_DRAW_UPON_HOLY_MIGHT)  // SPPR214.SPL (Draw Upon Holy Might)
+	!StateCheck(Myself,STATE_DRAWUPONHOLYMIGHT)
+THEN
+	RESPONSE #100
+		Spell(Myself,CLERIC_DRAW_UPON_HOLY_MIGHT)  // SPPR214.SPL (Draw Upon Holy Might)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_ARMOR_OF_FAITH)  // SPPR111.SPL (Armor of Faith)
+	!CheckSpellState(Myself,ARMOR_OF_FAITH)
+THEN
+	RESPONSE #100
+		Spell(Myself,CLERIC_ARMOR_OF_FAITH)  // SPPR111.SPL (Armor of Faith)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_HOLY_POWER)  // SPPR412.SPL (Holy Power)
+	!CheckSpellState(Myself,HOLY_POWER)
+THEN
+	RESPONSE #100
+		Spell(Myself,CLERIC_HOLY_POWER)  // SPPR412.SPL (Holy Power)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_RIGHTEOUS_MAGIC)  // SPPR513.SPL (Righteous Magic)
+	CheckStatLT(Myself,20,DAMAGELUCK)
+THEN
+	RESPONSE #100
+		Spell(Myself,CLERIC_RIGHTEOUS_MAGIC)  // SPPR513.SPL (Righteous Magic)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_ENTROPY_SHIELD)  // SPPR615.SPL (Entropy Shield)
+	!CheckSpellState(Myself,ENTROPY_SHIELD)
+THEN
+	RESPONSE #100
+		Spell(Myself,CLERIC_ENTROPY_SHIELD)  // SPPR615.SPL (Entropy Shield)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_DRAW_UPON_HOLY_MIGHT)  // SPPR214.SPL (Draw Upon Holy Might)
+	!StateCheck(Myself,STATE_DRAWUPONHOLYMIGHT)
+THEN
+	RESPONSE #100
+		Spell(Myself,CLERIC_DRAW_UPON_HOLY_MIGHT)  // SPPR214.SPL (Draw Upon Holy Might)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	!StateCheck(Myself,STATE_MIRRORIMAGE)
+	HaveSpell(WIZARD_MIRROR_IMAGE)  // SPWI212.SPL (Mirror Image)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_MIRROR_IMAGE)  // SPWI212.SPL (Mirror Image)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	!StateCheck(Myself,STATE_MIRRORIMAGE)
+	HaveSpellRES("RAWI212")  // SPWI212.SPL (Mirror Image)
+THEN
+	RESPONSE #100
+		SpellRES("RAWI212",Myself)  // SPWI212.SPL (Mirror Image)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	!StateCheck(Myself,STATE_HASTED)
+	HaveSpell(WIZARD_HASTE)  // SPWI305.SPL (Haste)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_HASTE)  // SPWI305.SPL (Haste)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	!StateCheck(Myself,STATE_HASTED)
+	HaveSpellRES("RAMART4")  // SPWI305.SPL (Haste)
+THEN
+	RESPONSE #100
+		SpellRES("RAMART4",Myself)  // SPWI305.SPL (Haste)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_GLOBE_OF_INVULNERABILITY)  // SPWI602.SPL (Globe of Invulnerability)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_GLOBE_OF_INVULNERABILITY)  // SPWI602.SPL (Globe of Invulnerability)
+		SetGlobal("ShortDurationBuffs","LOCALS",0)
+		DisplayStringHead(Myself,11973)  // done
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpellRES("RAWI602")  // ( Globe Of Invulnerability)
+THEN
+	RESPONSE #100
+		SpellRES("RAWI602",Myself)  // (Globe Of Invulnerability)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_MINOR_GLOBE_OF_INVULNERABILITY)  // SPWI406.SPL (Minor Globe of Invulnerability)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_MINOR_GLOBE_OF_INVULNERABILITY)  // SPWI406.SPL (Minor Globe of Invulnerability)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpellRES("RAWI406")  // SPWI406.SPL (Minor Globe Of Invulnerability)
+THEN
+	RESPONSE #100
+		SpellRES("RAWI406",Myself)  // SPWI406.SPL (Minor Globe Of Invulnerability)
+END
+
+IF
+	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+THEN
+	RESPONSE #100
+		SetGlobal("ShortDurationBuffs","LOCALS",0)
+		DisplayStringHead(Myself,11973)  // done
+END
+
+IF
+	Global("SpellDeflection","LOCALS",0)
+	HotKey(N)
+THEN
+	RESPONSE #100
+		SetGlobal("SpellDeflection","LOCALS",1)
+END
+
+IF
+	Global("SpellDeflection","LOCALS",1)
+	HotKey(N)
+THEN
+	RESPONSE #100
+		SetGlobal("SpellDeflection","LOCALS",0)
+		DisplayStringHead(Myself,11973)  // done
+END
+
+IF
+	GlobalGT("SpellDeflection","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_SPELL_TRAP)  // SPWI902.SPL (Spell Trap)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Myself,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_SPELL_TRAP)  // SPWI902.SPL (Spell Trap)
+END
+
+IF
+	GlobalGT("SpellDeflection","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_SPELL_TURNING)  // SPWI701.SPL (Spell Turning)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Myself,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_SPELL_TURNING)  // SPWI701.SPL (Spell Turning)
+END
+
+IF
+	GlobalGT("SpellDeflection","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_SPELL_DEFLECTION)  // SPWI618.SPL (Spell Deflection)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Myself,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_SPELL_DEFLECTION)  // SPWI618.SPL (Spell Deflection)
+END
+
+IF
+	GlobalGT("SpellDeflection","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_MINOR_SPELL_TURNING)  // SPWI522.SPL (Minor Spell Turning)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Myself,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_MINOR_SPELL_TURNING)  // SPWI522.SPL (Minor Spell Turning)
+END
+
+IF
+	GlobalGT("SpellDeflection","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_MINOR_SPELL_DEFLECTION)  // SPWI318.SPL (Minor Spell Deflection)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Myself,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_MINOR_SPELL_DEFLECTION)  // SPWI318.SPL (Minor Spell Deflection)
+END
+
+IF
+	GlobalGT("SpellDeflection","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREPRIEST)
+	HaveSpell(CLERIC_SHIELD_OF_THE_ARCHONS)  // SPPR701.SPL (Shield of the Archons)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_TURNING)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_TRAP)
+	!CheckStatGT(Myself,0,WIZARD_SPELL_DEFLECTION)
+	!CheckStatGT(Myself,0,CLERIC_SHIELD_OF_THE_ARCHONS)
+THEN
+	RESPONSE #100
+		Spell(Myself,CLERIC_SHIELD_OF_THE_ARCHONS)  // SPPR701.SPL (Shield of the Archons)
+END
+
+IF
+	GlobalGT("SpellDeflection","LOCALS",0)
+	ActionListEmpty()
+THEN
+	RESPONSE #100
+		SetGlobal("SpellDeflection","LOCALS",0)
+		DisplayStringHead(Myself,11973)  // done
+END
+
