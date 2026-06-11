@@ -48,6 +48,8 @@ Needs to be installed after DoF.
 
 Compatibility patch for users of Sword Coast Stratagems and Deities of Faerûn. Makes the Priest variants of antimagic spells granted by DOF behave like their wizard equivalents do under SCS.
 
+Needs to be installed after both SCS and DoF.
+
 ### Deafness prevents hearing Rogue Rebalancing bard song
 
 The Enhanced Editions have had Bard song be prevented by deafness, as well as break invisibility, for a long time. Rogue Rebalancing, however, hasn't been updated for it. Atweaks has a component that adds the second functionality. This adds the first. Requires RR Bard class changes (and is obviously pointless without it).
