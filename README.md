@@ -8,11 +8,11 @@ A straight nerf. Prevents Wizard spells, Priest spells, and magical innates. All
 
 ### Minsc Remains Controllable While Using His Berserk Ability
 
-A straight buff. The Berserk status effect (which normally makes Minsc uncontrollable) is removed, and the +2 to hit and damage bonus the Berserk status effect would normally grant is separately included. Spellcasting is disabled, as with the Berserker component.
+A straight buff. The Berserk status effect (which normally makes Minsc uncontrollable) is removed, and the +2 to hit and damage bonus the Berserk status effect would normally grant is made a separate effect of the ability. Spellcasting is disabled, as with the Berserker component.
 
 ### Berserk Override Script For Minsc
 
-Gives Minsc an override script (that is, a script that takes precedence of his normal companion AI and works even with companion AI turned off) that simulates the original berserking behavior. He will automatically equip a melee weapon and attack the nearest enemy. He can be given orders, but he'll shortly ignore them and resume mindlessly attacking. However, he won't attack friendlies, and you have enough control over him to use the fastest actions (such as chugging a potion).
+Gives Minsc an override script (that is, a script that takes precedence over his normal companion AI and works even with companion AI turned off) that simulates the original berserking behavior. He will automatically equip a melee weapon and attack the nearest enemy. He can be given orders, but he'll shortly ignore them and resume mindlessly attacking (which prevents the use of abilities with a casting time). However, he won't attack friendlies, and you have enough control to have him use instant actions (such as chugging a potion).
 
 ### Make sleep end upon taking damage
 
