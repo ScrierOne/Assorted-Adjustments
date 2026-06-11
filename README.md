@@ -81,16 +81,16 @@ In Icewind Dale, Dispel (and Remove) Magic has a 100% success chance, which make
 
 ### NPC Sprites
 
-Give Pit Fiends their Neverwinter Nights sprite animation
-Give Succubi their Neverwinter Nights sprite animation
-Give Bone Fiends a Neverwinter Nights sprite animation
-Give Hamatula their Neverwinter Nights sprite animation
-Give Abishai their Icewind Dale / Siege of Dragonspear sprite animation
-Give Alu-Fiends wings
-Give Erinyes wings (and change their sprites from human to elf)
-Give Displacer Beasts their Neverwinter Nights sprite animation
-Give Viconia her Sharran character colors from Siege of Dragonspear in BG1/BG2
-Give Voghiln a more warrior-like appearance by giving him the Fighter animation and basic chain mail as his starting armor
+Give Pit Fiends their Neverwinter Nights sprite animation  
+Give Succubi their Neverwinter Nights sprite animation  
+Give Bone Fiends a Neverwinter Nights sprite animation  
+Give Hamatula their Neverwinter Nights sprite animation  
+Give Abishai their Icewind Dale / Siege of Dragonspear sprite animation  
+Give Alu-Fiends wings  
+Give Erinyes wings (and change their sprites from human to elf)  
+Give Displacer Beasts their Neverwinter Nights sprite animation  
+Give Viconia her Sharran character colors from Siege of Dragonspear in BG1/BG2  
+Give Voghiln a more warrior-like appearance by giving him the Fighter animation and basic chain mail as his starting armor  
 
 These are purely cosmetic changes, and fairly self-evident. The credit for most of these animations goes to the Infinity Animations mod, though some of the devils were scaled down a bit from that mod's baseline.
 
