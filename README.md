@@ -12,7 +12,7 @@ A straight buff. The Berserk status effect (which normally makes Minsc uncontrol
 
 ### Berserk Override Script For Minsc
 
-Gives Minsc an override script (that is, a script that takes precedence of his normal companion AI and works even with companion AI turned off) that simulates the original berserking behavior. He will automatically equip a melee weapon and attack the nearest enemy. He can be given orders, but he'll shortly ignore them and resume mindlessly attacking. However, he won't attack friendlies, and you have enough control over him to use the fastest abilities (such as chugging a potion).
+Gives Minsc an override script (that is, a script that takes precedence of his normal companion AI and works even with companion AI turned off) that simulates the original berserking behavior. He will automatically equip a melee weapon and attack the nearest enemy. He can be given orders, but he'll shortly ignore them and resume mindlessly attacking. However, he won't attack friendlies, and you have enough control over him to use the fastest actions (such as chugging a potion).
 
 ### Make sleep end upon taking damage
 
