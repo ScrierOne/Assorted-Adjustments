@@ -1,3 +1,11 @@
+// Minsc's Rage
+
+@1=~Berserker Rage~
+
+@2=~Berserker Rage
+
+Minsc becomes enraged for 2 turns. While enraged, he gains a +2 bonus to his Strength and Dexterity, -2 to his THAC0, and +2 to his Damage. He becomes immune to charm, confusion, fear, feeblemind, hold, level drain, maze, stun, and sleep. He also gains 15 temporary Hit Points, which are taken away at the end of the berserk spree (possibly knocking him unconscious).~
+
 // Ring of Free Action
 
 @10=~Ring of Free Action: Edventar's Gift
