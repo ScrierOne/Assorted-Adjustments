@@ -10,9 +10,9 @@ A straight nerf. Prevents Wizard spells, Priest spells, and magical innates. All
 
 A straight buff. The Berserk status effect (which normally makes Minsc uncontrollable) is removed, and the +2 to hit and damage bonus the Berserk status effect would normally grant is made a separate effect of the ability. Spellcasting is disabled, as with the Berserker component.
 
-### Berserk Override Script For Minsc
+### Roleplay-Friendly Berserk Script For Minsc
 
-In case a fully controllable and in-control Minsc seems out of character, this component gives Minsc an override script (that is, a script that takes precedence over his normal companion AI and works even with companion AI turned off) that simulates the original berserking behavior. Upon using the Berserk ability, Minsc will automatically attack the nearest enemy with a melee weapon (switching to one if u). He can be given orders, but he'll shortly ignore them and resume mindlessly attacking the nearest enemy he sees. However, he won't attack friendlies, and you have enough control to have him use instant actions - such as chugging a potion - but he won't have the focus for anything that takes time to cast/activate.
+In case a fully controllable and in-control Minsc seems out of character, this component gives Minsc an override script (that is, a script that takes precedence over his normal companion AI and works even with companion AI turned off) that simulates the original berserking behavior. Upon using the Berserk ability, Minsc will automatically attack the nearest enemy with a melee weapon, switching to one if using ranged. He can be given orders, but he'll shortly ignore them and resume mindlessly attacking the nearest enemy he sees. However, he won't attack friendlies, and you have enough control to have him use instant actions - such as chugging a potion - but he won't have the focus for anything that takes time to cast/activate.
 
 ### Make sleep end upon taking damage
 
@@ -104,7 +104,7 @@ A custom portrait I created for Belhifet, initially from an AI prompt, then pain
 
 ### Lazy Companion AI 
 
-This AI is meant to automate tasks that are repetitive, trivial, or otherwise unfun, and to prevent them from deciding to do things you probably don't want them to. It's not meant to be anywhere near smart enough to play the game for you.
+This AI is meant to automate tasks that are repetitive, trivial, or otherwise unfun, and to prevent companions from deciding to do things you probably don't want them to. It's not meant to be anywhere near smart enough to play the game for you.
 
 Characters can be set to automatically attack enemies they see. They will then attack the nearest enemy they see that their equipped weapon can affect. Characters wielding melee weapons will not attack fire shielded enemies unless they have 100% resistance to the fire shield's damage type. Characters wielding ranged weapons will automatically switch to melee when attacked by in close quarters combat and then back to ranged once the enemy is gone. The combat AI will not target NPCs classified as innocent, like civilians who might have become hostile as the result of a failed pickpocketing.
 
@@ -133,4 +133,4 @@ Automatic buffing: selected characters will automatically cast common defensive 
 "B" 	Cast short duration (one round per level or less) buffs
 "N" 	Cast deflection-type spell defenses on self. Separate because these spells prevent being further buffed by others.
 
-Includes Icewind Dale spells, if installed, and some (but not all) of the spells and abilities from Deities of Faerûn.
+Includes Icewind Dale spells, if installed, and some of the spells and abilities from Deities of Faerûn.
