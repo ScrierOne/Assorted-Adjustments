@@ -28,7 +28,8 @@ REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate EE"
 
 COPY_EXISTING
 	"spin117.spl" "override" //Minsc Berserk
-SAY NAME1 "Berserker Rage"
+	SAY NAME1 @1																															// "Berserker Rage"
+	SAY UNIDENTIFIED_DESC @2
 	WRITE_EVALUATED_ASCII 0x3A ~ENRAGEB~ (8)										// Ability icons from berserk to enrage	
 	WRITE_EVALUATED_ASCII 0x76 ~ENRAGEB~ (8)
 	LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 142 parameter2 = 141 END 	// Portrait icon from berserk to enrage
