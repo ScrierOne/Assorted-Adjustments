@@ -27,7 +27,11 @@ BEGIN "Minsc Remains Controllable While Using His Rage" DESIGNATED 91
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate EE"
 
 COPY_EXISTING
-	"spin117.spl" "override" //Minsc
+	"spin117.spl" "override" //Minsc Berserk
+SAY NAME1 "Berserker Rage"
+	WRITE_EVALUATED_ASCII 0x3A ~ENRAGEB~ (8)										// Ability icons from berserk to enrage	
+	WRITE_EVALUATED_ASCII 0x76 ~ENRAGEB~ (8)
+	LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 142 parameter2 = 141 END 	// Portrait icon from berserk to enrage
 	LPF DELETE_EFFECT INT_VAR match_opcode = 3 END
 	LPF ADD_SPELL_EFFECT INT_VAR insert_point=0 opcode=73 target=1 duration=120 parameter1=2 parameter2=1  END
 	LPF ADD_SPELL_EFFECT INT_VAR insert_point=0 opcode=278 target=1 duration=120 parameter1=2 parameter2=0  END
