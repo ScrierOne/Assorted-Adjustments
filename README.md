@@ -1,6 +1,13 @@
 # Assorted-Adjustments
 A selection of tweaks for Beamdog's Enhanced Editions for the Baldur's Gate and Icewind Dale games.
 
+### PnP/IWD-Style Progression Cap (no XP cap, max 30 levels in each class)
+
+In 2nd Edition ADnD, level 30 is supposed to be the pinnacle of mortal achievement. This component enforces that. Different from the Tweaks Anthology component in that this one also removes the XP cap, so that multi/dual-class characters can achieve level 30 in all their classes.
+
+### HLAs Accessible From Level 21
+
+Different from the Tweaks Anthology component in that this one gives HLAs to *all classes* starting from level 21, whereas Tweaks Anthology delays them to 21 for those classes that would have gotten them earlier. Makes a difference for Rogue classes, who normally get their first HLA at level 24.
 
 ### Berserker Enrage Disables Spellcasting
 
@@ -22,6 +29,10 @@ Sleeping targets wake up when they're damaged, as one would expect. Sleep is sti
 
 Unconscious targets stay unconscious despite being damaged. Mostly a fix for IWD:EE, in which, according to the spell descriptions, this should already be the case (but isn't). 
 
+### PnP Luck
+
+Makes Luck an Alteration spell and increases its duration to 3 turns.
+
 ### PnP Skull Trap
 
 Skull Trap does 2d4 + (1d4*level) damage, only affects living creatures, and has a casting time of 4 instead of 3. The changes are taken from AD&D 2nd Edition source material, and make the spell more distinct from (and maybe not as clearly always superior to) Fireball.
@@ -34,6 +45,28 @@ According to PnP rules (and common sense, IMO), Cure spells should not affect th
 
 Makes the regular "Charm" spells work like the Ring of Human Influence, Algernon's Cloak and Nymph Cloak: characters that were neutral (blue circle) when charmed remain neutral when the charm ends. Dire Charm, Domination and such are conceptually different, and still turn their targets hostile when they end.
 
+### Prevent Mislead clones from being able to attack when speed weapons are equipped
+
+Mislead clones are illusionary, and aren't supposed to be able to affect ther physical world. BG:EE accomplishes this by setting their attacks per round to zero, but the effect doesn't cover speed weapons: a Mislead clone of someone wielding Belm will still get the extra attack from the sword. This component fixes that.
+
+### Allow Mislead clones to play Bard songs
+
+On the other hand, Mislead clones are explicitly able to speak, so singing shouldn't be an issue either.
+
+### Stop Free Action from preventing beneficial effects 
+
+Makes it so Free Action doesn't "protect" against spells like Haste. Also fixes some nonsensical interactions with Blade spins, which it shouldn't interact with at all. Unlike (at the time of this writing) the klatu fix, this one works with the EE Fixpack. Quite possibly redundant since the release of a cdtweaks component that does the same.
+
+### Remove Monk Haste Immunity 
+
+By request.
+
+### SCS Rules For Deities of Faerûn Cleric Antimagic (Can Target Invisible)
+
+Compatibility patch for users of Sword Coast Stratagems and Deities of Faerûn. Makes the Priest variants of antimagic spells granted by DOF behave like their wizard equivalents do under SCS.
+
+Needs to be installed after both SCS and DoF.
+
 ### Fixes For Deities of Faerûn
 
 Fixes some bugs with spell functionality in the Deities of Faerûn mod: 
@@ -44,34 +77,17 @@ Fixes some bugs with spell functionality in the Deities of Faerûn mod:
 
 Needs to be installed after DoF.
 
-### SCS Rules For Deities of Faerûn Cleric Antimagic (Can Target Invisible)
-
-Compatibility patch for users of Sword Coast Stratagems and Deities of Faerûn. Makes the Priest variants of antimagic spells granted by DOF behave like their wizard equivalents do under SCS.
-
-Needs to be installed after both SCS and DoF.
-
 ### Deafness prevents hearing Rogue Rebalancing bard song
 
 The Enhanced Editions have had Bard song be prevented by deafness, as well as break invisibility, for a long time. Rogue Rebalancing, however, hasn't been updated for it. Atweaks has a component that adds the second functionality. This adds the first. Requires RR Bard class changes (and is obviously pointless without it).
 
-### Prevent Mislead clones from being able to attack when speed weapons are equipped
+### Instant casting for PnP Celestials' innate abilities
 
-Mislead clones are illusionary, and aren't supposed to be able to affect ther physical world. BG:EE accomplishes this by setting their attacks per round to zero, but the effect doesn't cover speed weapons: a Mislead clone of someone wielding Belm will still get the extra attack from the sword. This component fixes that.
+Makes the innate spell-like abilities of this mod's celestials uninterruptable acts of will, consistent with PnP and mods like aTweaks or SCS. Only affects their innate abilities, not spells cast from spellbooks.
 
-### Allow Mislead clones to play Bard songs
+### Tweak PnP Celestial's script so they don't waste buffs on allies with spell protections
 
-
-On the other hand, Mislead clones are explicitly able to speak, so singing shouldn't be an issue either.
-
-
-### Stop Free Action from preventing beneficial effects 
-
-
-Makes it so Free Action doesn't "protect" against spells like Haste. Also fixes some nonsensical interactions with Blade spins, which it shouldn't interact with at all. Unlike (at the time of this writing) the klatu fix, this one works with the EE Fixpack. Quite possibly redundant since the release of a cdtweaks component that does the same.
-
-### Remove Monk Haste Immunity 
-
-By request.
+Keeps the celestials from burning through ally protection spells with endless casts of Aid or Resist Cold.
 
 ### Restful Cabins
 
@@ -88,13 +104,31 @@ Give Succubi their Neverwinter Nights sprite animation
 Give Bone Fiends a Neverwinter Nights sprite animation  
 Give Hamatula their Neverwinter Nights sprite animation  
 Give Abishai their Icewind Dale / Siege of Dragonspear sprite animation  
-Give Alu-Fiends wings  
-Give Erinyes wings (and change their sprites from human to elf)  
+Give Alu-Fiends a Winged (Elf) animation
+Give Erinyes a Winged (Elf) animation
+Give Erinyes (Cosmetic) Chain Mail Armor
 Give Displacer Beasts their Neverwinter Nights sprite animation  
 Give Viconia her Sharran character colors from Siege of Dragonspear in BG1/BG2  
-Give Voghiln a more warrior-like appearance by giving him the Fighter animation and basic chain mail as his starting armor  
+Give Voghiln a more warrior-like appearance by giving him the Fighter animation and basic chain mail as his starting armor
+Give BG2 Imoen her BG1 character colors
 
 These are purely cosmetic changes, and fairly self-evident. The credit for most of these animations goes to the Infinity Animations mod, though some of the devils were scaled down a bit from that mod's baseline.
+
+### Illusion-Detecting Imoen (redistribute default Imoen's thieving skills)
+
+Takes away some of BG2 default Imoen's other thieving skills and puts them to Detect Illusion, instead. The reasoning being that Detect Illusion is enormously useful with, say, SCS, and the other thieving skills can very easily be buffed by multiple different potions and items.
+
+Her skill points, prior to any bonuses from stats, race, and so on, are now assigned thus:
+90 in Detect Illusions
+30 in Open Locks
+15 in Move Silently (for RP reasons, she has this from level 1)
+55 in Find Traps
+
+### Give BG2 Imoen a Custom Portrait
+
+A composite of Imoen's vanilla portrait and some fantasy art I found online that I made some years ago.
+
+<img width="210" height="330" alt="NIMOENL" src="https://github.com/user-attachments/assets/bc5f5251-e62f-4bd3-a985-9237d6ebbbaa" />
 
 ### Give Belhifet a Custom Portrait
 
