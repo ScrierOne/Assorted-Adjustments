@@ -104,9 +104,9 @@ Give Succubi their Neverwinter Nights sprite animation
 Give Bone Fiends a Neverwinter Nights sprite animation  
 Give Hamatula their Neverwinter Nights sprite animation  
 Give Abishai their Icewind Dale / Siege of Dragonspear sprite animation  
-Give Alu-Fiends a Winged (Elf) animation
-Give Erinyes a Winged (Elf) animation
-Give Erinyes (Cosmetic) Chain Mail Armor
+Give Alu-Fiends a Winged (Elf) animation 
+Give Erinyes a Winged (Elf) animation 
+Give Erinyes (Cosmetic) Chain Mail Armor 
 Give Displacer Beasts their Neverwinter Nights sprite animation  
 Give Viconia her Sharran character colors from Siege of Dragonspear in BG1/BG2  
 Give Voghiln a more warrior-like appearance by giving him the Fighter animation and basic chain mail as his starting armor
