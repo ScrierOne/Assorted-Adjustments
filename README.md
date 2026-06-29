@@ -108,7 +108,8 @@ Give Alu-Fiends a Winged (Elf) animation
 Give Erinyes a Winged (Elf) animation  
 Give Erinyes (Cosmetic) Chain Mail Armor Give Displacer Beasts their Neverwinter Nights sprite animation  
 Give Viconia her Sharran character colors from Siege of Dragonspear in BG1/BG2  
-Give Voghiln a more warrior-like appearance by giving him the Fighter animation and basic chain mail as his starting armor Give BG2 Imoen her BG1 character colors  
+Give Voghiln a more warrior-like appearance by giving him the Fighter animation and basic chain mail as his starting armor  
+Give BG2 Imoen her BG1 character colors  
 
 These are purely cosmetic changes, and fairly self-evident. The credit for most of these animations goes to the Infinity Animations mod, though some of the devils were scaled down a bit from that mod's baseline.
 
