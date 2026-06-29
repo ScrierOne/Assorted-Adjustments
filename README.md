@@ -113,8 +113,6 @@ Give BG2 Imoen her BG1 character colors
 
 These are purely cosmetic changes, and fairly self-evident. The credit for most of these animations goes to the Infinity Animations mod, though some of the devils were scaled down a bit from that mod's baseline.
 
-These are purely cosmetic changes, and fairly self-evident. The credit for most of these animations goes to the Infinity Animations mod, though some of the devils were scaled down a bit from that mod's baseline.
-
 ### Illusion-Detecting Imoen (redistribute default Imoen's thieving skills)
 
 Takes away some of BG2 default Imoen's other thieving skills and puts them to Detect Illusion, instead. The reasoning being that Detect Illusion is enormously useful with, say, SCS, and the other thieving skills can very easily be buffed by multiple different potions and items.
