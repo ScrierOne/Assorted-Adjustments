@@ -449,6 +449,7 @@ IF_EXISTS BUT_ONLY
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Instant casting for PnP Celestials' innate abilities" DESIGNATED 3040
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2"
 REQUIRE_PREDICATE FILE_EXISTS_IN_GAME ~ca#dastr.cre~ "Game must include PnP Celestials"
 
 // Planetar Abilities
@@ -512,6 +513,7 @@ BUT_ONLY IF_EXISTS
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Tweak PnP Celestial's script so they don't waste buffs on allies with spell protections" DESIGNATED 3041
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2"
 REQUIRE_PREDICATE FILE_EXISTS_IN_GAME ~ca#dastr.bcs~ "Game must include PnP Celestials"
 
 COPY_EXISTING
