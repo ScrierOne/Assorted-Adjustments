@@ -67,6 +67,10 @@ Compatibility patch for users of Sword Coast Stratagems and Deities of Faerûn. 
 
 Needs to be installed after both SCS and DoF.
 
+### Give IWD Dispel Magic a chance to succeed/fail based on caster level like in Baldur's Gate
+
+In Icewind Dale, Dispel (and Remove) Magic has a 100% success chance, which makes it quite overpowered, renders all other antimagic spells redundant, and is incorrect by PnP rules. This component changes it to behave like the BG version, with a chance to dispel based on caster level and the effect being targeted.
+
 ### Fixes For Deities of Faerûn
 
 Fixes some bugs with spell functionality in the Deities of Faerûn mod: 
@@ -92,10 +96,6 @@ Keeps the celestials from burning through ally protection spells with endless ca
 ### Restful Cabins
 
 Does it grind your gears to not be able to rest in an empty cabin in the wilds, but somehow being perfectly able to camp in the yard? This allows resting in some such places (currently the cabins in Cloakwood and the High Hedge).
-
-### Give IWD Dispel Magic a chance to succeed/fail based on caster level like in Baldur's Gate
-
-In Icewind Dale, Dispel (and Remove) Magic has a 100% success chance, which makes it quite overpowered, renders all other antimagic spells redundant, and is incorrect by PnP rules. This component changes it to behave like the BG version, with a chance to dispel based on caster level and the effect being targeted.
 
 ### NPC Sprites
 
