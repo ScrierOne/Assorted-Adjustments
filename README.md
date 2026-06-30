@@ -117,6 +117,10 @@ Give BG2 Imoen her BG1 character colors
 
 These are purely cosmetic changes, and fairly self-evident. The credit for most of these animations goes to the Infinity Animations mod, though some of the devils were scaled down a bit from that mod's baseline.
 
+### Change Rogue Rebalancing Drow Chain Mail Colors
+
+The Drow Chain Mail available in Rogue Rebalancing is described as black, but is in fact rust-colored with multiple overlapping color pulse effects. This gives it the same colors as a Drow Adamantite Chain +5.
+
 ### Illusion-Detecting Imoen (redistribute default Imoen's thieving skills)
 
 Takes away some of BG2 default Imoen's other thieving skills and puts them into Detect Illusion, instead. The reasoning being that Detect Illusion is enormously useful with, say, SCS, and the other thieving skills can very easily be buffed by multiple different potions and items.
