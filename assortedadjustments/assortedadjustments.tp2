@@ -726,6 +726,21 @@ COPY_EXISTING
 	"bddispbp.cre" "override" 
 			WRITE_SHORT 0x28 0x7002 //Animation (displacer_beast_nwn)
 	BUT_ONLY IF_EXISTS
+	
+////////////////////////////////////////////////////////////////////////////////////////////////////
+BEGIN "Change Rogue Rebalancing Drow Chain Mail Colors" DESIGNATED 5075
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2"
+REQUIRE_PREDICATE FILE_EXISTS_IN_GAME ~RR#CHN01.ITM~ "Requires Rogue Rebalancing"
+
+COPY_EXISTING
+	"RR#CHN01.ITM" "override"	
+	LPF DELETE_EFFECT INT_VAR match_opcode = 7 END
+	LPF DELETE_EFFECT INT_VAR match_opcode = 9 END
+	LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 7 target = 1 timing = 2 parameter1 = 212 parameter2 = 5 END // Armor Trimming, Chrome Slate
+	LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 7 target = 1 timing = 2 parameter1 = 190 parameter2 = 4 END // Strap Leather, Deep Indigo
+	LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 7 target = 1 timing = 2 parameter1 = 245 parameter2 = 0 END // Belt Amulet, Chrome Sea Gray
+IF_EXISTS BUT_ONLY
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Give Viconia her Sharran character colors from Siege of Dragonspear in BG1/BG2" DESIGNATED 5080
