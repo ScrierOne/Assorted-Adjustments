@@ -125,7 +125,7 @@ Her skill points, prior to any bonuses from stats, race, and so on, are now assi
 
 ### Give BG2 Imoen a Custom Portrait
 
-A composite of Imoen's vanilla portrait and some fantasy art I found online that I made some years ago.
+I like Imoen's original BG2 portrait, but it doesn't match the hooded Rogue sprite she has in the EE. So a few years ago, I composited Imoen's face from her vanilla portrait onto some fantasy art I found online.
 
 <img width="210" height="330" alt="NIMOENL" src="https://github.com/user-attachments/assets/bc5f5251-e62f-4bd3-a985-9237d6ebbbaa" />
 
