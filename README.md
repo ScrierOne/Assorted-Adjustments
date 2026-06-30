@@ -115,13 +115,13 @@ These are purely cosmetic changes, and fairly self-evident. The credit for most 
 
 ### Illusion-Detecting Imoen (redistribute default Imoen's thieving skills)
 
-Takes away some of BG2 default Imoen's other thieving skills and puts them to Detect Illusion, instead. The reasoning being that Detect Illusion is enormously useful with, say, SCS, and the other thieving skills can very easily be buffed by multiple different potions and items.
+Takes away some of BG2 default Imoen's other thieving skills and puts them into Detect Illusion, instead. The reasoning being that Detect Illusion is enormously useful with, say, SCS, and the other thieving skills can very easily be buffed by multiple different potions and items.
 
-Her skill points, prior to any bonuses from stats, race, and so on, are now assigned thus:
-90 in Detect Illusions
-30 in Open Locks
-15 in Move Silently (for RP reasons, she has this from level 1)
-55 in Find Traps
+Her skill points, prior to any bonuses from stats, race, and so on, are now assigned thus:  
+90 in Detect Illusions  
+30 in Open Locks  
+15 in Move Silently (for RP reasons, she has this from level 1)  
+55 in Find Traps  
 
 ### Give BG2 Imoen a Custom Portrait
 
