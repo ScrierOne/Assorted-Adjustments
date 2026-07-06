@@ -9,11 +9,11 @@ In 2nd Edition ADnD, level 30 is supposed to be the pinnacle of mortal achieveme
 
 Different from the Tweaks Anthology component in that this one gives HLAs to *all classes* starting from level 21, whereas Tweaks Anthology delays them to 21 for those classes that would have gotten them earlier. Makes a difference for Rogue classes, who normally get their first HLA at level 24.
 
-### Berserker Enrage Disables Spellcasting
+### Berserker Enrage disables spellcasting
 
 A straight nerf. Prevents Wizard spells, Priest spells, and magical innates. Allows non-magical abilities and item usage.
 
-### Minsc Remains Controllable While Using His Berserk Ability
+### Minsc remains controllable while using his Berserk ability
 
 A straight buff. The Berserk status effect (which normally makes Minsc uncontrollable) is removed, and the +2 to hit and damage bonus the Berserk status effect would normally grant is made a separate effect of the ability. Spellcasting is disabled, as with the Berserker component.
 
@@ -105,11 +105,11 @@ Makes the innate spell-like abilities of this mod's celestials uninterruptable a
 
 Keeps the celestials from burning through ally protection spells with endless casts of Aid or Resist Cold.
 
-### Restful Cabins
+### Restful cabins
 
 Does it grind your gears to not be able to rest in an empty cabin in the wilds, but somehow being perfectly able to camp in the yard? This allows resting in some such places (currently the cabins in Cloakwood and the High Hedge).
 
-### NPC Sprites
+### NPC sprites
 
 Give Pit Fiends their Neverwinter Nights sprite animation  
 Give Succubi their Neverwinter Nights sprite animation  
@@ -129,11 +129,11 @@ Give BG2 Imoen her BG1 character colors
 
 These are purely cosmetic changes, and fairly self-evident. The credit for most of these animations goes to the Infinity Animations mod, though some of the devils were scaled down a bit from that mod's baseline.
 
-### Change Rogue Rebalancing Drow Chain Mail Colors
+### Change Rogue Rebalancing Drow Chain Mail colors
 
 The Drow Chain Mail available in Rogue Rebalancing is described as black, but is in fact rust-colored with multiple overlapping color pulse effects. This gives it the same colors as a Drow Adamantite Chain +5.
 
-### Illusion-Detecting Imoen (redistribute default Imoen's thieving skills)
+### Illusion-detecting Imoen (redistribute default Imoen's thieving skills)
 
 Takes away some of BG2 default Imoen's other thieving skills and puts them into Detect Illusion, instead. The reasoning being that Detect Illusion is enormously useful with, say, SCS, and the other thieving skills can very easily be buffed by multiple different potions and items.
 
@@ -143,13 +143,13 @@ Her skill points, prior to any bonuses from stats, race, and so on, are now assi
 15 in Move Silently (for RP reasons, she has this from level 1)  
 55 in Find Traps  
 
-### Give BG2 Imoen a Custom Portrait
+### Give BG2 Imoen a custom portrait
 
 I like Imoen's original BG2 portrait, but it doesn't match the hooded Rogue sprite she has in the EE. So a few years ago, I composited Imoen's face from her vanilla portrait onto some fantasy art I found online.
 
 <img width="210" height="330" alt="NIMOENL" src="https://github.com/user-attachments/assets/bc5f5251-e62f-4bd3-a985-9237d6ebbbaa" />
 
-### Give Belhifet a Custom Portrait
+### Give Belhifet a customportrait
 
 A custom portrait I created for Belhifet, initially from an AI prompt, then painting over the result, then compositing the result with some stock photos, then running the whole thing through a different AI, then compositing again, then hand painting again, et cetera. I think it actually looks lore accurate, but in any event it took too much effort not to share somewhere. Includes a portrait for the mysterious voice Hephernaan communicates with, as well.
 
