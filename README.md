@@ -35,7 +35,7 @@ Makes Luck an Alteration spell and increases its duration to 3 turns.
 
 ### PnP/IWD-style Tenser's Transformation
 
-Adds 1 APR, provided that the caster doesn't already have extra attacks from their class.
+Adds +1 APR for casters who don't already get extra attacks from their class.
 
 ### PnP Skull Trap
 
