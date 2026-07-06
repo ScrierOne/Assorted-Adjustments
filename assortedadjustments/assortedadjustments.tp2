@@ -5,7 +5,7 @@ LANGUAGE
 "English"  ~assortedadjustments/english~ ~assortedadjustments/english/english.tra~
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-BEGIN "PnP/IWD-Style Progression Cap (no XP cap, max 30 levels in each class)" DESIGNATED 1010
+BEGIN "PnP/IWD-style progression cap (no XP cap, max 30 levels in each class)" DESIGNATED 1010
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2"
 
@@ -34,7 +34,7 @@ SET_2DA_ENTRY 11 1 2 ~-1~
 BUT_ONLY
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-BEGIN "HLAs Accessible From Level 21" DESIGNATED 1020
+BEGIN "HLAs accessible from level 21" DESIGNATED 1020
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2"
   
@@ -46,28 +46,28 @@ END
 BUT_ONLY
   
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-BEGIN "Berserker Enrage Disables Spellcasting" DESIGNATED 2010
+BEGIN "Berserker Enrage disables spellcasting" DESIGNATED 2010
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet IWDEE" "Game must be EE"
 
 COPY_EXISTING
-	"spcl321.spl" "override" 		// Berserker Enrage
-	"ragara1.spl" "override" 		// DoF special ability versions
-	"ragruu4.spl" "override" 		// 
-	"rahoar1.spl" "override" 		// 
-	"ratemp1.spl" "override" 		//  
+	"spcl321.spl" override 		// Berserker Enrage
+	"ragara1.spl" override 		// DoF special ability versions
+	"ragruu4.spl" override 		// 
+	"rahoar1.spl" override 		// 
+	"ratemp1.spl" override 		//  
 	LPF ADD_SPELL_EFFECT INT_VAR insert_point=0 opcode=145 target=1 duration=60 parameter2=0 END
 	LPF ADD_SPELL_EFFECT INT_VAR insert_point=0 opcode=145 target=1 duration=60 parameter2=1 END
 	LPF ADD_SPELL_EFFECT INT_VAR insert_point=0 opcode=145 target=1 duration=60 parameter2=3 END
 BUT_ONLY IF_EXISTS 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-BEGIN "Minsc Remains Controllable While Using His Berserk Ability" DESIGNATED 2020
+BEGIN "Minsc remains controllable while using his Berserk ability" DESIGNATED 2020
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate EE"
 
 COPY_EXISTING
-	"spin117.spl" "override" //Minsc
+	"spin117.spl" override //Minsc
 	SAY NAME1 @1																															// "Berserker Rage"
 	SAY UNIDENTIFIED_DESC @2
 			WRITE_EVALUATED_ASCII 0x3A ~ENRAGEB~ (8)															// Ability icons from berserk to enrage	
@@ -82,7 +82,7 @@ COPY_EXISTING
 BUT_ONLY IF_EXISTS 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-BEGIN "Roleplay-Friendly Berserk Script For Minsc" DESIGNATED 2021
+BEGIN "Roleplay-friendly berserk script for Minsc" DESIGNATED 2021
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate "
 REQUIRE_COMPONENT "assortedadjustments.tp2" 2020 "This component requires 'Minsc Remains Controllable While Using His Rage' to be installed"
@@ -103,41 +103,41 @@ BEGIN "Make sleep end upon taking damage" DESIGNATED 2030
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate:EE"
 
 COPY_EXISTING 
-	"sppr102.spl" "override" // Command
-	"sppr512.spl" "override" // Greater Command
-	"spwi220.spl" "override" // Power Word: Sleep
-	"spwi116.spl" "override" // Wizard Sleep
-	"wand08.itm" "override" // Wand of Sleep
-	"dwdart01.itm" "override"
-	"dwbolt01.itm" "override" // Drow dart / bolt
-	"dagg13.itm" "override" // Pixie Prick
+	"sppr102.spl" override // Command
+	"sppr512.spl" override // Greater Command
+	"spwi220.spl" override // Power Word: Sleep
+	"spwi116.spl" override // Wizard Sleep
+	"wand08.itm" override // Wand of Sleep
+	"dwdart01.itm" override
+	"dwbolt01.itm" override // Drow dart / bolt
+	"dagg13.itm" override // Pixie Prick
 	
-	"RAWI220.spl" "override" // DOF Cleric PW: Sleep
-	"RAWI116.spl" "override" // DOF Cleric Sleep
-	"RAELDA2.SPL" "override"
-	"RASHARE4.spl" "override" // DOF Sleep Gaze
-	"RASHAR3.spl" "override"// DOF Nightmare
+	"RAWI220.spl" override // DOF Cleric PW: Sleep
+	"RAWI116.spl" override // DOF Cleric Sleep
+	"RAELDA2.SPL" override
+	"RASHARE4.spl" override // DOF Sleep Gaze
+	"RASHAR3.spl" override// DOF Nightmare
 	
-	"SPWI434.SPL" "override" // Made in Heaven Spellback Slumber
+	"SPWI434.SPL" override // Made in Heaven Spellback Slumber
 	
   LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 39 parameter2 = 0 END
 IF_EXISTS BUT_ONLY
 
-	COPY "%MOD_FOLDER%/EFF/SLEEPY.EFF" "override"
+	COPY "%MOD_FOLDER%/EFF/SLEEPY.EFF" override
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-BEGIN "Make unconsciousness NOT end upon taking damage" DESIGNATED 2031
+BEGIN "Make unconsciousness not end upon taking damage" DESIGNATED 2031
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet iwdee" "Game must be EE "
 
 COPY_EXISTING
-	"spwi032.spl" "override" // Color Spray IWD
-	"spwi105.spl" "override" // Color Spray BG
-	"spin937.spl" "override" // Innate Color Spray BG
-	"SPPR426.SPL" "override" //Smashing Wave 
-	"SPWI711.SPL" "override" //Sphere of Chaos
-	"rawi032.spl" "override" // DOF Cleric Color Spray IWD
-	"rawi105.spl" "override" // DOF Cleric Color Spray BG
+	"spwi032.spl" override // Color Spray IWD
+	"spwi105.spl" override // Color Spray BG
+	"spin937.spl" override // Innate Color Spray BG
+	"SPPR426.SPL" override //Smashing Wave 
+	"SPWI711.SPL" override //Sphere of Chaos
+	"rawi032.spl" override // DOF Cleric Color Spray IWD
+	"rawi105.spl" override // DOF Cleric Color Spray BG
   LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 39 parameter2 = 1 END
 IF_EXISTS BUT_ONLY
 
@@ -179,6 +179,20 @@ COPY_EXISTING "SCRL93.ITM" override // Luck Scroll
 		SAY DESC @63
 IF_EXISTS BUT_ONLY
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+BEGIN "PnP Tenser's Transformation" DESIGNATED 2055
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+REQUIRE_PREDICATE GAME_IS "bg2ee eet " "Game must be EE "
+
+COPY 
+	"%MOD_FOLDER%/Spell/tensrapr.spl" override
+
+COPY_EXISTING 
+	"spwi603.spl" override 
+			SAY UNIDENTIFIED_DESC @70
+			LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode= 321 target= 1 parameter1 = 6  STR_VAR resource="tensrapr" END 
+			LPF ADD_SPELL_EFFECT INT_VAR opcode= 146 target= 1 power = 6 parameter1 = 0 parameter2= 1  STR_VAR resource="tensrapr" END 
+IF_EXISTS BUT_ONLY		
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "PnP Skull Trap" DESIGNATED 2060
@@ -221,7 +235,7 @@ COPY_EXISTING "SCRL1P.ITM" override // Skull Trap Scroll
 IF_EXISTS BUT_ONLY
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-BEGIN "Cure Spells Won't Affect Undead And Constructs" DESIGNATED 2070
+BEGIN "Cure spells won't affect undead and constructs" DESIGNATED 2070
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet iwdee" "Game must be EE "
 
@@ -249,7 +263,7 @@ COPY_EXISTING
 BUT_ONLY IF_EXISTS 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-BEGIN "Consistent Charm Person (or Mammal): Doesn't Turn Neutral Characters Hostile" DESIGNATED 2080
+BEGIN "Consistent Charm Person (or Mammal): doesn't turn neutral characters hostile" DESIGNATED 2080
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet iwdee" "Game must be EE "
 
@@ -262,13 +276,32 @@ COPY_EXISTING
 IF_EXISTS BUT_ONLY
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+BEGIN "Dire Charm makes affected creatures berserk" DESIGNATED 2081
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate 2"
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+
+COPY_EXISTING 
+~SPWI316.spl~ override
+~SPPR982.SPL~ override // Trap
+~SPWI943.spl~ override // Sirine
+~SPIN171.spl~ override // Fiend
+
+SAY UNIDENTIFIED_DESC @80
+	LPF CLONE_EFFECT INT_VAR match_opcode = 5 opcode = 3 END
+	LPF DELETE_EFFECT INT_VAR match_opcode = 5 END
+	LPF CLONE_EFFECT INT_VAR match_opcode = 3 opcode = 5 parameter2 = 0 END
+	LPF ALTER_EFFECT INT_VAR match_opcode = 3 parameter2 = 0 END
+IF_EXISTS BUT_ONLY
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Prevent Mislead clones from being able to attack when speed weapons are equipped" DESIGNATED 2090
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate:EE"
 
 COPY_EXISTING
-                  "mislead.spl"			"override"				// vanilla mislead
-                  "g_misled.spl" 		"override"				// tnt Mislead
+                  "mislead.spl"			override				// vanilla mislead
+                  "g_misled.spl" 		override				// tnt Mislead
 LPF DELETE_EFFECT INT_VAR match_opcode = 1 END
 LPF DELETE_EFFECT INT_VAR match_opcode = 101 match_parameter2 = 1 END
 
@@ -283,25 +316,25 @@ BEGIN "Allow Mislead clones to play Bard songs" DESIGNATED 2091
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate:EE"
 
 COPY_EXISTING
-                  "mislead.spl"			"override"				// vanilla mislead
-                  "g_misled.spl" 		"override"				// tnt Mislead
+                  "mislead.spl"			override				// vanilla mislead
+                  "g_misled.spl" 		override				// tnt Mislead
 LPF DELETE_EFFECT INT_VAR match_opcode = 144 match_parameter2 = 10 END
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-BEGIN "Stop Free Action from preventing beneficial effects" DESIGNATED 2100
+BEGIN "Prevent Free Action from interfering with beneficial effects" DESIGNATED 2100
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate:EE"
 
 COPY_EXISTING 
-	"RING09.ITM" "override" // Edventar's Gift
-	"BDRING09.ITM" "override" // Edventar's Gift SoD
-	"POTN45.ITM" "override" // Potion of Freedom
-	"SPPR403.SPL" "override" // Cleric Free Action spell
-	"SW2H06.ITM" "override" // Spider's Bane
-	"BLUN30.ITM" "override" // Flail of Ages +5
-	"SPER12.ITM" "override" // Ixil's Spike
-	"NPPLAT.ITM" "override" // Keldorn's armor
+	"RING09.ITM" override // Edventar's Gift
+	"BDRING09.ITM" override // Edventar's Gift SoD
+	"POTN45.ITM" override // Potion of Freedom
+	"SPPR403.SPL" override // Cleric Free Action spell
+	"SW2H06.ITM" override // Spider's Bane
+	"BLUN30.ITM" override // Flail of Ages +5
+	"SPER12.ITM" override // Ixil's Spike
+	"NPPLAT.ITM" override // Keldorn's armor
 		LPF DELETE_EFFECT INT_VAR match_opcode = 206 match_parameter2 = 175 END  //Protection from spell: Defensive Spin
 		LPF DELETE_EFFECT INT_VAR match_opcode = 206 match_parameter2 = 16 END // Protection from spell: Haste
 		LPF DELETE_EFFECT INT_VAR match_opcode = 101 match_parameter2 = 16 END // Immunity to Effect: Haste
@@ -317,37 +350,37 @@ COPY_EXISTING
 IF_EXISTS BUT_ONLY
 
 COPY_EXISTING 
-	"RING09.ITM" "override" // Edventar's Gift
+	"RING09.ITM" override // Edventar's Gift
 		SAY DESC @10
 IF_EXISTS BUT_ONLY
 
 COPY_EXISTING 
-		"SCRL58.ITM" "override" // Cleric Free Action scroll
+		"SCRL58.ITM" override // Cleric Free Action scroll
 		SAY DESC @20
 IF_EXISTS BUT_ONLY
 
 COPY_EXISTING 
-		"SPPR403.SPL" "override" // Cleric Free Action spell
+		"SPPR403.SPL" override // Cleric Free Action spell
 		SAY UNIDENTIFIED_DESC @20
 IF_EXISTS BUT_ONLY
 
 COPY_EXISTING 
-	"POTN45.ITM" "override" // Potion of Freedom
+	"POTN45.ITM" override // Potion of Freedom
 		SAY DESC @30
 IF_EXISTS BUT_ONLY
 
 COPY_EXISTING 
-	"SW2H06.ITM" "override" // Spider's Bane
+	"SW2H06.ITM" override // Spider's Bane
 		SAY DESC @40 
 IF_EXISTS BUT_ONLY
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-BEGIN "Remove Monk Haste Immunity" DESIGNATED 2110
+BEGIN "Remove Monk Haste immunity" DESIGNATED 2110
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate:EE"
 
 COPY_EXISTING 
-	"SPCL814.spl" "override" // Monk Haste Immunity
+	"SPCL814.spl" override // Monk Haste Immunity
 		LPF DELETE_EFFECT INT_VAR match_opcode = 206 match_parameter2 = 16 END // Protection from spell: Haste
 		LPF DELETE_EFFECT INT_VAR match_opcode = 101 match_parameter2 = 16 END // Immunity to Effect: Haste
 		LPF DELETE_EFFECT INT_VAR match_opcode = 101 match_parameter2 = 126 END // Immunity to Effect: Movement rate bonus
@@ -367,16 +400,66 @@ BEGIN "Give IWD Dispel Magic a chance to succeed/fail based on caster level like
 REQUIRE_PREDICATE GAME_IS "iwdee" "Game must be Icewind Dale:EE"
 
 COPY_EXISTING 
-	"SPWI302.SPL" "override" // Remove Magic
-	"SPWI323.SPL" "override" //Wizard Dispel Magic
-	"SPPR303.SPL" "override" // Cleric Dispel Magic
-	"SPCL231.SPL" "override" // Inquisitor Dispel Magic
-	"RADENE3.SPL" "override" // 
-	"RALOLT2.SPL" "override" //
-	"RAMORA3.SPL" "override" // 
-	"RAMYST1.SPL" "override" //
+	"SPWI302.SPL" override // Remove Magic
+	"SPWI323.SPL" override //Wizard Dispel Magic
+	"SPPR303.SPL" override // Cleric Dispel Magic
+	"SPCL231.SPL" override // Inquisitor Dispel Magic
+	"RADENE3.SPL" override // 
+	"RALOLT2.SPL" override //
+	"RAMORA3.SPL" override // 
+	"RAMYST1.SPL" override //
 			WRITE_SHORT 0x162 0x0001
 			WRITE_SHORT 0x164 0x0002
+IF_EXISTS BUT_ONLY
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+BEGIN "Time Stop makes affected creatures invulnerable" DESIGNATED 2130
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+REQUIRE_PREDICATE GAME_IS "bgee bg2ee iwdee eet" "Game must be EE"
+
+// Introduce spell that adds damage and effect immunities:
+
+COPY
+"%MOD_FOLDER%/Spell/tsimm.spl" override
+"%MOD_FOLDER%/Spell/tsimm2.spl" override
+
+COPY_EXISTING
+                  "spwi909.spl"			override				// Wizard Time Stop
+				  "rawi909.spl" 		override					// DoF Cleric Time Stop
+
+LPF ADD_SPELL_EFFECT INT_VAR insert_point= 0 opcode = 146 timing = 0 target= 1 parameter1 = 0 parameter2 = 1 STR_VAR resource = "tsimm" END
+IF_EXISTS BUT_ONLY
+
+// Double length immunities for Wish version of Time Stop:
+
+COPY_EXISTING
+                  "spwish17.spl" 		override				// Wish Time Stop
+				  "dw#wish3.spl" 		override				// SCS Wish Time Stop
+LPF ADD_SPELL_EFFECT INT_VAR insert_point= 0 opcode = 146 timing = 0 target= 1 parameter1 = 0 parameter2 = 1 STR_VAR resource = "tsimm2" END
+IF_EXISTS BUT_ONLY
+
+// Time Stop immunizing abilities:
+
+COPY_EXISTING
+			"balth02.spl"		override				// Balthazar's Lunar Stance
+			"kish7.spl"		override					// Monk Overhaul Lunar Stance
+			"focus.spl"		override					// Ascension Focus ability
+			
+LPF CLONE_EFFECT INT_VAR match_opcode = 310 opcode = 206 STR_VAR resource = "tsimm" END
+LPF CLONE_EFFECT INT_VAR match_opcode = 310 opcode = 206 STR_VAR resource = "tsimm2" END
+IF_EXISTS BUT_ONLY
+
+// Time Stop immune Creatures:
+
+COPY_EXISTING
+			"demogor2.cre" override 			// Demogorgon
+			"CHALRV01.CRE" override 			// Ravager
+			"OHBBRVGR.CRE" override 		// Black Pits Ravager
+			"DRAGBLUE.CRE" override 		// Abazigal, Dragon Form
+			"finmel01.cre" override 				// Final Battle Melissan
+			
+LPF ADD_CRE_EFFECT INT_VAR opcode = 206 target = 1 timing = 9 STR_VAR resource = "tsimm" END
+LPF ADD_CRE_EFFECT INT_VAR opcode = 206 target = 1 timing = 9 STR_VAR resource = "tsimm2" END
 IF_EXISTS BUT_ONLY
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -386,24 +469,31 @@ REQUIRE_PREDICATE GAME_IS "iwdee bgee bg2ee eet" "Game must be Baldur's Gate:EE"
 REQUIRE_COMPONENT "DeitiesOfFaerun.tp2" 0 "This component requires Deities of Faerûn to be installed"
 
 COPY_EXISTING
-"RAWI321.spl" "override"// Spell Thrust
-"RAWI805.spl" "override"// Pierce Shield
-"RAWI419.spl" "override"// Secret Word
-"RAWI608.spl" "override"// Pierce Magic
+"RAWI321.spl" override// Spell Thrust
+"RAWI805.spl" override// Pierce Shield
+"RAWI419.spl" override// Secret Word
+"RAWI608.spl" override// Pierce Magic
 
 WRITE_LONG 0x018 0x01000600
 
 IF_EXISTS BUT_ONLY
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-BEGIN "Fixes For Deities of Faerûn" DESIGNATED 3020
+BEGIN "Fixes for Deities of Faerûn" DESIGNATED 3020
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "iwdee bgee bg2ee eet" "Game must be EE"
 REQUIRE_COMPONENT "DeitiesOfFaerun.tp2" 0 "This component requires Deities of Faerûn to be installed"
 
+// Seeking Sword
+
+COPY_EXISTING "RATYR4.spl" override
+WRITE_SHORT 0x086 4
+WRITE_SHORT 0x08c 0
+  IF_EXISTS BUT_ONLY 
+  
 // Tyr Cleric's Detect Invisibility at will:
 
-COPY_EXISTING "RATYR4.spl" "override"
+COPY_EXISTING "RATYR4.spl" override
   LPF ADD_SPELL_EFFECT INT_VAR opcode = 171 target = 1 timing = 1 STR_VAR resource = "%SOURCE_RES%" END
   LPF CLONE_EFFECT INT_VAR match_opcode = 171 opcode = 172 END 
   IF_EXISTS BUT_ONLY 
@@ -411,8 +501,8 @@ COPY_EXISTING "RATYR4.spl" "override"
  // Makes Holy Word not target party:
   
  COPY_EXISTING 
-	"RATYR3.spl" "override" //  Holy Word, Tyr
-	"RATORM5.spl" "override" // Holy Word, Torm
+	"RATYR3.spl" override //  Holy Word, Tyr
+	"RATORM5.spl" override // Holy Word, Torm
 
 LPF ALTER_EFFECT INT_VAR match_opcode= 324 STR_VAR resource="%SOURCE_RES%" END
 IF_EXISTS BUT_ONLY
@@ -420,9 +510,9 @@ IF_EXISTS BUT_ONLY
 // Makes Strength of One not override strength higher than 18/76:
 
   COPY_EXISTING 
-	"RAARVO5.spl" "override" //  Strength of One, Arvoreen
-	"RATYR2.spl" "override" //  Strength of One, Tyr
-	"RACLAN3.spl" "override" //  Strength of One, Clangeddin
+	"RAARVO5.spl" override //  Strength of One, Arvoreen
+	"RATYR2.spl" override //  Strength of One, Tyr
+	"RACLAN3.spl" override //  Strength of One, Clangeddin
 
 LPF ALTER_EFFECT INT_VAR match_opcode= 318 STR_VAR resource="%SOURCE_RES%" END  
 IF_EXISTS BUT_ONLY
@@ -434,13 +524,13 @@ REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate:EE"
 REQUIRE_COMPONENT "setup-rr.tp2" 3 "This component requires Rogue Rebalancing to be installed"
 
 COPY_EXISTING
-                  "RR#BDF02.spl" 			"override"                                          // Rogue Rebalancing True Bard song
-                  "RR#BBL02.spl"			"override"                                         // Rogue Rebalancing Blade song
-                  "RR#BSK00.spl"			"override"                                         // Rogue Rebalancing Skald song
-                  "RR#BDF04.spl"			"override"                                         // Rogue Rebalancing True Bard Enhanced song
-                  "RR#BDF06.spl"			"override"                                         // Rogue Rebalancing True Bard Lingering song
-                  "RR#BSK02.spl"			"override"                                        // Rogue Rebalancing Skald Enhanced song
-                  "RR#BSK04.spl"			"override"                                        // Rogue Rebalancing Skald Lingering song
+                  "RR#BDF02.spl" 			override                                          // Rogue Rebalancing True Bard song
+                  "RR#BBL02.spl"			override                                         // Rogue Rebalancing Blade song
+                  "RR#BSK00.spl"			override                                         // Rogue Rebalancing Skald song
+                  "RR#BDF04.spl"			override                                         // Rogue Rebalancing True Bard Enhanced song
+                  "RR#BDF06.spl"			override                                         // Rogue Rebalancing True Bard Lingering song
+                  "RR#BSK02.spl"			override                                        // Rogue Rebalancing Skald Enhanced song
+                  "RR#BSK04.spl"			override                                        // Rogue Rebalancing Skald Lingering song
   
 LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 2 timing = 0 duration = 1 prob1 = 100 parameter2 = 66 STR_VAR resource = "%SOURCE_RES%" END
 
@@ -449,63 +539,63 @@ IF_EXISTS BUT_ONLY
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Instant casting for PnP Celestials' innate abilities" DESIGNATED 3040
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2"
+REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2:EE"
 REQUIRE_PREDICATE FILE_EXISTS_IN_GAME ~ca#dastr.cre~ "Game must include PnP Celestials"
 
 // Planetar Abilities
 
 COPY_EXISTING
-	"ca#aid.spl"  "override"
-	"ca#blbar.spl"  "override"
-	"ca#cdise.spl"  "override"
-	"ca#cursw.spl"  "override"
-	"ca#devil.spl"  "override"
-	"ca#dsnp.spl"  "override"
-	"ca#dispm.spl"  "override"
-	"ca#eq.spl"  "override"
-	"ca#fmind.spl"  "override"
-	"ca#fstom.spl"  "override"
-	"ca#fstri.spl"  "override"
-	"ca#resto.spl"  "override"
-	"ca#heal.spl"  "override"
-	"ca#hword.spl"  "override"
-	"ca#ii10.spl"  "override"
-	"ca#iplag.spl"  "override"
-	"ca#knal.spl"  "override"
-	"ca#lwish.spl"  "override"
-	"ca#pao.spl"  "override"
-	"ca#symb.spl"  "override"
-	"ca#sdeat.spl"  "override"
-	"ca#sfear.spl"  "override"
-	"ca#sstun.spl"  "override"
-	"ca#pev40.spl"  "override"
-	"ca#rdead.spl"  "override"
-	"ca#rcur.spl"  "override"
-	"ca#rfear.spl"  "override"
-	"ca#rcold.spl"  "override"
+	"ca#aid.spl"  override
+	"ca#blbar.spl"  override
+	"ca#cdise.spl"  override
+	"ca#cursw.spl"  override
+	"ca#devil.spl"  override
+	"ca#dsnp.spl"  override
+	"ca#dispm.spl"  override
+	"ca#eq.spl"  override
+	"ca#fmind.spl"  override
+	"ca#fstom.spl"  override
+	"ca#fstri.spl"  override
+	"ca#resto.spl"  override
+	"ca#heal.spl"  override
+	"ca#hword.spl"  override
+	"ca#ii10.spl"  override
+	"ca#iplag.spl"  override
+	"ca#knal.spl"  override
+	"ca#lwish.spl"  override
+	"ca#pao.spl"  override
+	"ca#symb.spl"  override
+	"ca#sdeat.spl"  override
+	"ca#sfear.spl"  override
+	"ca#sstun.spl"  override
+	"ca#pev40.spl"  override
+	"ca#rdead.spl"  override
+	"ca#rcur.spl"  override
+	"ca#rfear.spl"  override
+	"ca#rcold.spl"  override
 	
 	// Fallen Planetar
 	
-	"ca#causw.spl" "override"
-	"ca#harm.spl"  "override"
-	"ca#uword.spl"  "override"
-	"ca#peg40.spl"  "override"
+	"ca#causw.spl" override
+	"ca#harm.spl"  override
+	"ca#uword.spl"  override
+	"ca#peg40.spl"  override
 	
 	// Deva Abilities
 
-	"ca#dinvs.spl"  "override"
-	"ca#dsp.spl"  "override"
-	"ca#culw.spl"  "override"
-	"ca#dism.spl"  "override"
-	"ca#hmon.spl"  "override"
-	"ca#mimg.spl"  "override"
-	"ca#dmch.spl"  "override"
-	"ca#cudis.spl"  "override"
-	"ca#ams.spl"  "override"
-	"ca#pnfm.spl"  "override"
-	"ca#sturn.spl"  "override"
-	"ca#harm1.spl"  "override"
-	"ca#heal1.spl"  "override"
+	"ca#dinvs.spl"  override
+	"ca#dsp.spl"  override
+	"ca#culw.spl"  override
+	"ca#dism.spl"  override
+	"ca#hmon.spl"  override
+	"ca#mimg.spl"  override
+	"ca#dmch.spl"  override
+	"ca#cudis.spl"  override
+	"ca#ams.spl"  override
+	"ca#pnfm.spl"  override
+	"ca#sturn.spl"  override
+	"ca#harm1.spl"  override
+	"ca#heal1.spl"  override
 	
 	LPF ALTER_SPELL_HEADER INT_VAR speed = 0 END // 
 BUT_ONLY IF_EXISTS 
@@ -513,7 +603,7 @@ BUT_ONLY IF_EXISTS
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Tweak PnP Celestial's script so they don't waste buffs on allies with spell protections" DESIGNATED 3041
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2"
+REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2:EE"
 REQUIRE_PREDICATE FILE_EXISTS_IN_GAME ~ca#dastr.bcs~ "Game must include PnP Celestials"
 
 COPY_EXISTING
@@ -549,11 +639,11 @@ BUT_ONLY IF_EXISTS
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Restful Cabins" DESIGNATED 4000
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-REQUIRE_PREDICATE GAME_IS "bgee" "Game must be BG1:EE"
+REQUIRE_PREDICATE GAME_IS "bgee eet" "Game must be BG1:EE"
 
 	COPY_EXISTING
-	"ar2215.are" "override" 		// Hunting Lodge
-	"ar3201.are" "override" 		// High Hedge Cabin
+	"ar2215.are" override 		// Hunting Lodge
+	"ar3201.are" override 		// High Hedge Cabin
 		WRITE_BYTE 0x48 0x0080 // set rest indoors flag
 IF_EXISTS 
 BUT_ONLY
@@ -564,18 +654,20 @@ BEGIN "Give Pit Fiends their Neverwinter Nights sprite animation" DESIGNATED 500
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate:EE"
 
 	COPY 
-	"%MOD_FOLDER%/IA/NWN_PIT_FIEND" "override"
+	"%MOD_FOLDER%/IA/NWN_PIT_FIEND" override
 	APPEND "animate.ids" "0xe091 PIT_FIEND_NWN" UNLESS "^0xe091"  //write animate.ids
 
 COPY_EXISTING
-	"gorbat1.cre" "override"
-	"dempit.cre" "override"
-	"dempit01.cre"  "override"
-	"dempitsu.cre"  "override"
-	"dw#bazpf.cre" "override"
-	"dw#pitsu.cre" "override"
-	"telpit1.cre"  "override"
-	"telpit2.cre"  "override"
+	"gorbat1.cre" override
+	"dempit.cre" override
+	"dempit01.cre"  override
+	"dempitsu.cre"  override
+	"dw#bazpf.cre" override
+	"dw#pitsu.cre" override
+	"telpit1.cre"  override
+	"telpit2.cre"  override
+	"rr#hspit.cre" override
+	"fl#pitsu.cre" override
 			WRITE_SHORT 0x28 0xe091 //Animation (pit_fiend_nwn)
 			WRITE_BYTE 0x2d 47 //Minor color (pure dark red)
 			WRITE_BYTE 0x2e 46 //Major color (red)
@@ -591,16 +683,17 @@ BEGIN "Give Succubi their Neverwinter Nights sprite animation" DESIGNATED 5010
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate:EE"
 
 	COPY 
-	"%MOD_FOLDER%/IA/NWN_SUCCUBUS" "override"
+	"%MOD_FOLDER%/IA/NWN_SUCCUBUS" override
 	APPEND "animate.ids" "0xe092 SUCCUBUS_NWN" UNLESS "^0xe092"  //write animate.ids
 
 COPY_EXISTING
-	"DEMSUC01.cre" "override" 
-	"finsucc.cre" "override" 
-	"GORSUC01.cre" "override" 
-	"GORTAN2.cre" "override" 
-	"OHBDEM04.cre" "override" 
-	"GORWOM01" "override"
+	"DEMSUC01.cre" override 
+	"finsucc.cre" override 
+	"GORSUC01.cre" override 
+	"GORTAN2.cre" override 
+	"OHBDEM04.cre" override 
+	"GORWOM01" override
+	"rr#hssuc.cre" override
 			WRITE_SHORT 0x28 0xe092 //Animation (succubus_nwn)
 	BUT_ONLY IF_EXISTS
 	
@@ -610,15 +703,17 @@ BEGIN "Give Bone Fiends a Neverwinter Nights sprite animation" DESIGNATED 5020
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate:EE"
 
 	COPY 
-	"%MOD_FOLDER%/IA/nwn_osyluth" "override"
+	"%MOD_FOLDER%/IA/nwn_osyluth" override
 	APPEND "animate.ids" "0xe093 OSYLUTH_NWN" UNLESS "^0xe093"  //write animate.ids
 
 COPY_EXISTING
-	"DBONEF01.cre" "override" 
-	"GORBAT5.cre" "override" 
-	"OHHBONEG.cre" "override" 
-	"BDBONEFI.cre" "override" 
-	"DW#BFSUM.cre" "override" 
+	"MELSUM02.CRE" override
+	"DBONEF01.cre" override 
+	"GORBAT5.cre" override 
+	"OHHBONEG.cre" override 
+	"BDBONEFI.cre" override 
+	"DW#BFSUM.cre" override
+	"rr#hsbfn.cre"	override
 			WRITE_SHORT 0x28 0xe093 //Animation (osyluth_nwn)
 			LAUNCH_PATCH_FUNCTION DELETE_CRE_EFFECT
         INT_VAR opcode_to_delete = 51 //Strong-dark by RGB
@@ -632,11 +727,12 @@ BEGIN "Give Abishai their Icewind Dale / Siege of Dragonspear sprite animation" 
 REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2:EE"
 	
 		COPY 
-	"%MOD_FOLDER%/IA/abishai_red" "override"
+	"%MOD_FOLDER%/IA/abishai_red" override
 	
 	COPY_EXISTING
-	"abisred1.cre" "override" 
-	"demabi01.cre" "override" 
+	"abisred1.cre" override 
+	"demabi01.cre" override
+	"rr#hsabi.cre" override
 			WRITE_SHORT 0x28 0x7F5A //Animation (red_abishai)
 			LAUNCH_PATCH_FUNCTION DELETE_CRE_EFFECT
         INT_VAR opcode_to_delete = 51 //Strong-dark by RGB
@@ -649,11 +745,11 @@ BEGIN "Give Hamatula their Neverwinter Nights sprite animation" DESIGNATED 5040
 REQUIRE_PREDICATE GAME_IS "bgee eet" "Game must be Baldur's Gate:EE"
 	
 		COPY 
-	"%MOD_FOLDER%/IA/nwn_hamatula" "override"
+	"%MOD_FOLDER%/IA/nwn_hamatula" override
 	APPEND "animate.ids" "0xe095 HAMATULA_NWN" UNLESS "^0xe095"  //write animate.ids
 	
 	COPY_EXISTING
-	"bdhamatu.cre" "override" 
+	"bdhamatu.cre" override 
 			WRITE_SHORT 0x28 0xe095 //Animation (nwn_hamatula)
 	BUT_ONLY IF_EXISTS
 
@@ -663,19 +759,19 @@ BEGIN "Give Alu-Fiends a Winged (Elf) animation" DESIGNATED 5050
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate:EE"
 
 	COPY_EXISTING
-	"alufie01.cre" "override" 
-	"alufie02.cre" "override" 
-	"goralu01.cre" "override" 
-	"telalu1.cre" "override" 
-	"telsuc1.cre" "override" 
-	"rr#hsalu.cre" "override"
-	"finaluf.cre" "override"
+	"alufie01.cre" override 
+	"alufie02.cre" override 
+	"goralu01.cre" override 
+	"telalu1.cre" override 
+	"telsuc1.cre" override 
+	"rr#hsalu.cre" override
+	"finaluf.cre" override
 	WRITE_SHORT 0x28 0x6111 // Animation ID (fighter_female_elf)
 	REPLACE_CRE_ITEM "wings01" #0 #0 #0 "UNDROPPABLE" "HELMET"
 BUT_ONLY IF_EXISTS
 
 	COPY_EXISTING
-	"goralu01.cre" "override" 
+	"goralu01.cre" override 
 	WRITE_BYTE 0x02f 105 // Skin Color: Off White
 BUT_ONLY IF_EXISTS
 
@@ -685,15 +781,15 @@ BEGIN "Give Erinyes a Winged (Elf) animation" DESIGNATED 5060
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate:EE"
 
 	COPY_EXISTING
-	"bderinye.cre" "override" 
+	"bderinye.cre" override 
 	REPLACE_CRE_ITEM "wings01" #0 #0 #0 "UNDROPPABLE" "HELMET"
 BUT_ONLY IF_EXISTS
 
 	COPY_EXISTING
-	"deriny01.cre" "override" 
-	"gorbat2.cre" "override" 
-	"ohbdev04.cre" "override" 
-	"RR#HSERI.CRE" "override"
+	"deriny01.cre" override 
+	"gorbat2.cre" override 
+	"ohbdev04.cre" override 
+	"RR#HSERI.CRE" override
 	WRITE_SHORT 0x28 0x6111 // Animation ID (fighter_female_elf)
 	REPLACE_CRE_ITEM "wings01" #0 #0 #0 "UNDROPPABLE" "HELMET"
 BUT_ONLY IF_EXISTS
@@ -703,12 +799,12 @@ BEGIN "Give Erinyes (Cosmetic) Chain Mail Armor" DESIGNATED 5061
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate:EE"
 
-COPY "%MOD_FOLDER%/ITM/erichain.itm" "override"
+COPY "%MOD_FOLDER%/ITM/erichain.itm" override
 	COPY_EXISTING
-	"deriny01.cre" "override" 
-	"gorbat2.cre" "override" 
-	"ohbdev04.cre" "override" 
-	"RR#HSERI.CRE" "override"
+	"deriny01.cre" override 
+	"gorbat2.cre" override 
+	"ohbdev04.cre" override 
+	"RR#HSERI.CRE" override
 	ADD_CRE_ITEM "erichain" #0 #0 #0 "UNDROPPABLE" "ARMOR"
 BUT_ONLY IF_EXISTS
 
@@ -718,29 +814,14 @@ BEGIN "Give Displacer Beasts their Neverwinter Nights sprite animation" DESIGNAT
 REQUIRE_PREDICATE GAME_IS "bgee eet" "Game must be Baldur's Gate:EE"
 
 	COPY 
-	"%MOD_FOLDER%/IA/ccp_displacer_beast" "override"
+	"%MOD_FOLDER%/IA/ccp_displacer_beast" override
 	APPEND "animate.ids" "0x7002 DISPLACER_BEAST_NWN" UNLESS "^0x7002"  //write animate.ids
 
 COPY_EXISTING
-	"bddispbe.cre" "override" 
-	"bddispbp.cre" "override" 
+	"bddispbe.cre" override 
+	"bddispbp.cre" override 
 			WRITE_SHORT 0x28 0x7002 //Animation (displacer_beast_nwn)
 	BUT_ONLY IF_EXISTS
-	
-////////////////////////////////////////////////////////////////////////////////////////////////////
-BEGIN "Change Rogue Rebalancing Drow Chain Mail Colors" DESIGNATED 5075
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2"
-REQUIRE_PREDICATE FILE_EXISTS_IN_GAME ~RR#CHN01.ITM~ "Requires Rogue Rebalancing"
-
-COPY_EXISTING
-	"RR#CHN01.ITM" "override"	
-	LPF DELETE_EFFECT INT_VAR match_opcode = 7 END
-	LPF DELETE_EFFECT INT_VAR match_opcode = 9 END
-	LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 7 target = 1 timing = 2 parameter1 = 212 parameter2 = 5 END // Armor Trimming, Chrome Slate
-	LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 7 target = 1 timing = 2 parameter1 = 190 parameter2 = 4 END // Strap Leather, Deep Indigo
-	LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 7 target = 1 timing = 2 parameter1 = 245 parameter2 = 0 END // Belt Amulet, Chrome Sea Gray
-IF_EXISTS BUT_ONLY
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Give Viconia her Sharran character colors from Siege of Dragonspear in BG1/BG2" DESIGNATED 5080
@@ -748,15 +829,15 @@ BEGIN "Give Viconia her Sharran character colors from Siege of Dragonspear in BG
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate"
 
 COPY_EXISTING
-	"viconi.cre" "override"
-	"viconi4.cre" "override"
-	"viconi6.cre" "override"
-	"viconi7.cre" "override"
-	"viconi8.cre" "override"
-	"viconi9.cre" "override"
-	"viconi11.cre" "override"
-	"viconi13.cre" "override"
-	"viconi16.cre" "override"
+	"viconi.cre" override
+	"viconi4.cre" override
+	"viconi6.cre" override
+	"viconi7.cre" override
+	"viconi8.cre" override
+	"viconi9.cre" override
+	"viconi11.cre" override
+	"viconi13.cre" override
+	"viconi16.cre" override
 		WRITE_BYTE 0x02c 28 // Metal Color: Bluish Silver
 		WRITE_BYTE 0x02d 117 // Minor Color: Dark Orchid
 		WRITE_BYTE 0x02e 190 // Major Color: Deep Indigo
@@ -773,7 +854,7 @@ BEGIN "Give Voghiln a more warrior-like appearance by giving him the Fighter ani
 REQUIRE_PREDICATE GAME_INCLUDES "SOD" "Game must be Baldur's Gate: Siege of Dragonspear"
 
 COPY_EXISTING
-	"voghil7.cre" "override"
+	"voghil7.cre" override
 		WRITE_LONG 0x028 0x6100 // Animation: Fighter
 		ADD_CRE_ITEM "chan01" #0 #0 #0 "None" "armor"
 IF_EXISTS 
@@ -785,12 +866,12 @@ BEGIN "Give BG2 Imoen her BG1 character colors" DESIGNATED 5082
 REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2"
 
 COPY_EXISTING 
-	"imoen6.cre" "override"
-	"imoen10.cre" "override"
-	"imoen15.cre" "override"
-	"imoen211.cre" "override"
-	"imoen213.cre" "override"
-	"imoen10.cre" "override"
+	"imoen6.cre" override
+	"imoen10.cre" override
+	"imoen15.cre" override
+	"imoen211.cre" override
+	"imoen213.cre" override
+	"imoen10.cre" override
 	
 		WRITE_BYTE 0x02c 25 // Metal Color: Dark Pure Gold
 		WRITE_BYTE 0x02d 151 // Minor Color: Heliotrop
@@ -808,12 +889,12 @@ BEGIN "Illusion-Detecting Imoen (redistribute default Imoen's thieving skills)" 
 REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2"
 
 COPY_EXISTING 
-	"imoen6.cre" "override"
-	"imoen10.cre" "override"
-	"imoen15.cre" "override"
-	"imoen211.cre" "override"
-	"imoen213.cre" "override"
-	"imoen10.cre" "override"
+	"imoen6.cre" override
+	"imoen10.cre" override
+	"imoen15.cre" override
+	"imoen211.cre" override
+	"imoen213.cre" override
+	"imoen10.cre" override
 	
 WRITE_BYTE 0x45 0 // Hide in Shadows
 WRITE_BYTE 0x64 90 // Detect Illusion
@@ -830,35 +911,50 @@ BEGIN "Give BG2 Imoen a Custom Portrait" DESIGNATED 5084
 REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2"
 
 COPY
-	"%MOD_FOLDER%/BMP/NIMOENL.bmp" "override"
-	"%MOD_FOLDER%/BMP/NIMOENM.bmp" "override"
-	"%MOD_FOLDER%/BMP/NIMOENS.bmp" "override"
+	"%MOD_FOLDER%/BMP/NIMOENL.bmp" override
+	"%MOD_FOLDER%/BMP/NIMOENM.bmp" override
+	"%MOD_FOLDER%/BMP/NIMOENS.bmp" override
 	
+////////////////////////////////////////////////////////////////////////////////////////////////////
+BEGIN "Change Rogue Rebalancing Drow Chain Mail Colors" DESIGNATED 5085
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2"
+REQUIRE_PREDICATE FILE_EXISTS_IN_GAME ~RR#CHN01.ITM~ "Requires Rogue Rebalancing"
+
+COPY_EXISTING
+	"RR#CHN01.ITM" override	
+	LPF DELETE_EFFECT INT_VAR match_opcode = 7 END
+	LPF DELETE_EFFECT INT_VAR match_opcode = 9 END
+	LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 7 target = 1 timing = 2 parameter1 = 212 parameter2 = 5 END // Armor Trimming, Chrome Slate
+	LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 7 target = 1 timing = 2 parameter1 = 190 parameter2 = 4 END // Strap Leather, Deep Indigo
+	LPF ADD_ITEM_EQEFFECT INT_VAR opcode = 7 target = 1 timing = 2 parameter1 = 245 parameter2 = 0 END // Belt Amulet, Chrome Sea Gray
+IF_EXISTS BUT_ONLY
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Give Belhifet a Custom Portrait" DESIGNATED 5090
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_INCLUDES "SOD" "Game must be Baldur's Gate: Siege of Dragonspear"
 
 COPY_EXISTING
-	"bdbelhif.cre" "override"
+	"bdbelhif.cre" override
 WRITE_EVALUATED_ASCII 0x34 ~BDBELHIF~ #8
 IF_EXISTS 
 BUT_ONLY
 COPY
-	"%MOD_FOLDER%/BMP/bdbelhif.bmp" "override"
+	"%MOD_FOLDER%/BMP/bdbelhif.bmp" override
 
 COPY_EXISTING
-	"bdvoice.cre" "override"
+	"bdvoice.cre" override
 WRITE_EVALUATED_ASCII 0x34 ~BDVOICE~ #7
 IF_EXISTS 
 BUT_ONLY
 COPY
-	"%MOD_FOLDER%/BMP/bdvoice.bmp" "override"
+	"%MOD_FOLDER%/BMP/bdvoice.bmp" override
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Install Lazy Companion AI" DESIGNATED 6000
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-REQUIRE_PREDICATE GAME_IS "bgee bg2ee iwdee" "Game must be BG1:EE/BG2:EE/IWD:EE"
+REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet iwdee" "Game must be BG1:EE/BG2:EE/IWD:EE"
 
   ACTION_IF (GAME_IS "bgee") BEGIN
 	COPY
