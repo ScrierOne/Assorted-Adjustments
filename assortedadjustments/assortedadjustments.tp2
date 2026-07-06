@@ -123,7 +123,10 @@ COPY_EXISTING
   LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 39 parameter2 = 0 END
 IF_EXISTS BUT_ONLY
 
-	COPY "%MOD_FOLDER%/EFF/SLEEPY.EFF" override
+COPY_EXISTING 
+	"SLEEPY.EFF" override
+	WRITE_SHORT 0x0020 0000
+IF_EXISTS BUT_ONLY
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Make unconsciousness not end upon taking damage" DESIGNATED 2031
