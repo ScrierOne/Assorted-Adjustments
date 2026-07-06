@@ -51,7 +51,7 @@ Makes the regular "Charm" spells work like the Ring of Human Influence, Algernon
 
 ### Dire Charm makes its target go berserk
 
-Dire Charm makes its target go berserk, as in PnP.
+Dire Charm makes its target go berserk, as in PnP. Also serves to make the spell distinct from being just another Charm Person.
 
 ### Prevent Mislead clones from being able to attack when speed weapons are equipped
 
