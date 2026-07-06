@@ -7,7 +7,7 @@ In 2nd Edition ADnD, level 30 is supposed to be the pinnacle of mortal achieveme
 
 ### HLAs accessible from level 21
 
-Different from the Tweaks Anthology component in that this one gives HLAs to *all classes* starting from level 21, whereas Tweaks Anthology delays them to 21 for those classes that would have gotten them earlier. Makes a difference for Rogue classes, who normally get their first HLA at level 24.
+Different from the Tweaks Anthology component in that this one gives HLAs to *all classes* starting from level 21, whereas Tweaks Anthology delays them to 21 for those classes that would have gotten them earlier. Relevant for single-class Rogues, who normally get their first HLA at level 24 and would thus miss out on three HLAs.
 
 ### Berserker Enrage disables spellcasting
 
