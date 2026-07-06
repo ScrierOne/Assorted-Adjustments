@@ -1,11 +1,11 @@
 # Assorted-Adjustments
 A selection of tweaks for Beamdog's Enhanced Editions for the Baldur's Gate and Icewind Dale games.
 
-### PnP/IWD-Style Progression Cap (no XP cap, max 30 levels in each class)
+### PnP/IWD-Style progression cap (no XP cap, max 30 levels in each class)
 
 In 2nd Edition ADnD, level 30 is supposed to be the pinnacle of mortal achievement. This component enforces that. Different from the Tweaks Anthology component in that this one also removes the XP cap, so that multi/dual-class characters can achieve level 30 in all their classes.
 
-### HLAs Accessible From Level 21
+### HLAs accessible from level 21
 
 Different from the Tweaks Anthology component in that this one gives HLAs to *all classes* starting from level 21, whereas Tweaks Anthology delays them to 21 for those classes that would have gotten them earlier. Makes a difference for Rogue classes, who normally get their first HLA at level 24.
 
@@ -17,7 +17,7 @@ A straight nerf. Prevents Wizard spells, Priest spells, and magical innates. All
 
 A straight buff. The Berserk status effect (which normally makes Minsc uncontrollable) is removed, and the +2 to hit and damage bonus the Berserk status effect would normally grant is made a separate effect of the ability. Spellcasting is disabled, as with the Berserker component.
 
-### Roleplay-Friendly Berserk Script For Minsc
+### Roleplay-friendly berserk script for Minsc
 
 In case a fully controllable and in-control Minsc seems out of character, this component gives Minsc an override script (that is, a script that takes precedence over his normal companion AI and works even with companion AI turned off) that simulates the original berserking behavior. Upon using the Berserk ability, Minsc will automatically attack the nearest enemy with a melee weapon, switching to one if using ranged. He can be given orders, but he'll shortly ignore them and resume mindlessly attacking the nearest enemy he sees. However, he won't attack friendlies, and you have enough control to have him use instant actions - such as chugging a potion - but he won't have the focus for anything that takes time to cast/activate.
 
@@ -25,7 +25,7 @@ In case a fully controllable and in-control Minsc seems out of character, this c
 
 Sleeping targets wake up when they're damaged, as one would expect. Sleep is still very powerful, but not an auto-win/loss.
 
-### Make unconsciousness NOT end upon taking damage
+### Make unconsciousness not end upon taking damage
 
 Unconscious targets stay unconscious despite being damaged. Mostly a fix for IWD:EE, in which, according to the spell descriptions, this should already be the case (but isn't). 
 
@@ -33,17 +33,25 @@ Unconscious targets stay unconscious despite being damaged. Mostly a fix for IWD
 
 Makes Luck an Alteration spell and increases its duration to 3 turns.
 
+### PnP/IWD-style Tenser's Transformation
+
+Adds 1 APR, provided that the caster doesn't already have extra attacks from their class.
+
 ### PnP Skull Trap
 
 Skull Trap does 2d4 + (1d4*level) damage, only affects living creatures, and has a casting time of 4 instead of 3. The changes are taken from AD&D 2nd Edition source material, and make the spell more distinct from (and maybe not as clearly always superior to) Fireball.
 
-### Cure Spells Won't Affect Undead And Constructs
+### Cure spells won't affect undead and constructs
 
 According to PnP rules (and common sense, IMO), Cure spells should not affect the non-living.
 
-### Consistent Charm Person (or Mammal): Doesn't Turn Neutral Characters Hostile
+### Consistent Charm Person (or Mammal): doesn't turn neutral characters hostile
 
 Makes the regular "Charm" spells work like the Ring of Human Influence, Algernon's Cloak and Nymph Cloak: characters that were neutral (blue circle) when charmed remain neutral when the charm ends. Dire Charm, Domination and such are conceptually different, and still turn their targets hostile when they end.
+
+### Dire Charm makes its target go berserk
+
+Dire Charm makes its target go berserk, as in PnP.
 
 ### Prevent Mislead clones from being able to attack when speed weapons are equipped
 
@@ -70,6 +78,10 @@ Needs to be installed after both SCS and DoF.
 ### Give IWD Dispel Magic a chance to succeed/fail based on caster level like in Baldur's Gate
 
 In Icewind Dale, Dispel (and Remove) Magic has a 100% success chance, which makes it quite overpowered, renders all other antimagic spells redundant, and is incorrect by PnP rules. This component changes it to behave like the BG version, with a chance to dispel based on caster level and the effect being targeted.
+
+### Time Stop makes affected creatures invulnerable
+
+Inspired by a similar component in Angel's Made in Heaven spell pack. Like that component, this makes it impossible to harm creatures frozen in time. This one is different in that it remains possible to harm creatures immune to time stop, so Ascension Balthazar and Melissan, for example, can keep duking it out during anybody's Time Stop.
 
 ### Fixes For Deities of Faerûn
 
