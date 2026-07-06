@@ -61,19 +61,13 @@ Mislead clones are illusionary, and aren't supposed to be able to affect ther ph
 
 On the other hand, Mislead clones are explicitly able to speak, so singing shouldn't be an issue either.
 
-### Stop Free Action from preventing beneficial effects 
+### Prevent Free Action from interfering with beneficial effects
 
 Makes it so Free Action doesn't "protect" against spells like Haste. Also fixes some nonsensical interactions with Blade spins, which it shouldn't interact with at all. Unlike (at the time of this writing) the klatu fix, this one works with the EE Fixpack. Quite possibly redundant since the release of a cdtweaks component that does the same.
 
 ### Remove Monk Haste Immunity 
 
 By request.
-
-### SCS Rules For Deities of Faerûn Cleric Antimagic (Can Target Invisible)
-
-Compatibility patch for users of Sword Coast Stratagems and Deities of Faerûn. Makes the Priest variants of antimagic spells granted by DOF behave like their wizard equivalents do under SCS.
-
-Needs to be installed after both SCS and DoF.
 
 ### Give IWD Dispel Magic a chance to succeed/fail based on caster level like in Baldur's Gate
 
@@ -82,6 +76,12 @@ In Icewind Dale, Dispel (and Remove) Magic has a 100% success chance, which make
 ### Time Stop makes affected creatures invulnerable
 
 Inspired by a similar component in Angel's Made in Heaven spell pack. Like that component, this makes it impossible to harm creatures frozen in time. This one is different in that it remains possible to harm creatures immune to time stop, so Ascension Balthazar and Melissan, for example, can keep duking it out during anybody's Time Stop.
+
+### SCS Rules For Deities of Faerûn Cleric Antimagic (Can Target Invisible)
+
+Compatibility patch for users of Sword Coast Stratagems and Deities of Faerûn. Makes the Priest variants of antimagic spells granted by DOF behave like their wizard equivalents do under SCS.
+
+Needs to be installed after both SCS and DoF.
 
 ### Fixes For Deities of Faerûn
 
