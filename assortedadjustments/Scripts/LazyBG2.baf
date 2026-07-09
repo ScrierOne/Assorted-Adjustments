@@ -75,6 +75,11 @@ IF
 	OR(2)
 		Global("BardInCombat","LOCALS",0)
 		Global("Attacking","LOCALS",0)
+	Global("VeryLongDurationBuffs","LOCALS",1)
+	Global("LongDurationBuffs","LOCALS",1)
+	Global("MediumDurationBuffs","LOCALS",1)
+	Global("ShortDurationBuffs","LOCALS",1)
+	Global("VeryLongDurationBuffs","LOCALS",1)
 	ActionListEmpty()
 	Class(Myself,BARD_ALL)
 	!ModalState(BATTLESONG)
@@ -1416,8 +1421,30 @@ END
 IF
 	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
 	ActionListEmpty()
+	HaveSpell(JAN_AMMO)  // SPIN829.SPL (Create Bruiser Mates)
+THEN
+	RESPONSE #100
+		Spell(Myself,JAN_AMMO)  // SPIN829.SPL (Create Bruiser Mates)
+END
+
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
 	CombatCounter(0)
 	!Detect(NearestEnemyOf(Myself))
+	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
+	HaveSpell(WIZARD_MIND_BLANK)  // SPWI806.SPL (Mind Blank)
+	!CheckSpellState(Myself,CHAOTIC_COMMANDS)
+THEN
+	RESPONSE #100
+		Spell(Myself,WIZARD_MIND_BLANK)  // SPWI806.SPL (Mind Blank)
+END
+
+IF
+	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
+	ActionListEmpty()
+	CombatCounter(0)
+	!Detect(NearestEnemyOf(Myself))							
 	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
 	HaveSpell(WIZARD_STONE_SKIN)  // SPWI408.SPL (Stoneskin)
 	CheckStat(Myself,0,STONESKINS)
@@ -1457,21 +1484,11 @@ IF
 	ActionListEmpty()
 	CombatCounter(0)
 	!Detect(NearestEnemyOf(Myself))
-	!CheckStatGT(Myself,0,SPELLFAILUREMAGE)
-	HaveSpell(WIZARD_MIND_BLANK)  // SPWI806.SPL (Mind Blank)
-	!CheckSpellState(Myself,CHAOTIC_COMMANDS)
+	!CheckStatGT(Myself,17,CON)
+	HasItem("Belt09",Myself)  // Girdle of Fortitude
 THEN
 	RESPONSE #100
-		Spell(Myself,WIZARD_MIND_BLANK)  // SPWI806.SPL (Mind Blank)
-END
-
-IF
-	GlobalGT("VeryLongDurationBuffs","LOCALS",0)
-	ActionListEmpty()
-	HaveSpell(JAN_AMMO)  // SPIN829.SPL (Create Bruiser Mates)
-THEN
-	RESPONSE #100
-		Spell(Myself,JAN_AMMO)  // SPIN829.SPL (Create Bruiser Mates)
+		UseItem("Belt09",Myself) 
 END
 
 IF
@@ -1504,10 +1521,10 @@ IF
 	CombatCounter(0)
 	!Detect(NearestEnemyOf(Myself))
 	!StateCheck(Myself,STATE_BLESS)
-	HasItem("RAFeast",Myself)  // Blessed Food
+	HasItem("Belt09",Myself)  // Girdle of Fortitude
 THEN
 	RESPONSE #100
-		UseItem("RAFeast",Myself)  // Blessed Food
+		UseItem("Belt09",Myself) 
 END
 
 IF
