@@ -324,7 +324,6 @@ COPY_EXISTING
                   "g_misled.spl" 		override				// tnt Mislead
 LPF DELETE_EFFECT INT_VAR match_opcode = 144 match_parameter2 = 10 END
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Prevent Free Action from interfering with beneficial effects" DESIGNATED 2100
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -479,6 +478,64 @@ COPY_EXISTING
 "RAWI608.spl" override// Pierce Magic
 
 WRITE_LONG 0x018 0x01000600
+
+IF_EXISTS BUT_ONLY
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+BEGIN "Fixes for Deities of Faerûn" DESIGNATED 3020
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+REQUIRE_PREDICATE GAME_IS "iwdee bgee bg2ee eet" "Game must be EE"
+REQUIRE_COMPONENT "DeitiesOfFaerun.tp2" 0 "This component requires Deities of Faerûn to be installed"
+
+// Seeking Sword
+
+COPY_EXISTING "RATYR4.spl" override
+WRITE_SHORT 0x086 4
+WRITE_SHORT 0x08c 0
+  IF_EXISTS BUT_ONLY 
+  
+// Tyr Cleric's Detect Invisibility at will:
+
+COPY_EXISTING "RATYR4.spl" override
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 171 target = 1 timing = 1 STR_VAR resource = "%SOURCE_RES%" END
+  LPF CLONE_EFFECT INT_VAR match_opcode = 171 opcode = 172 END 
+  IF_EXISTS BUT_ONLY 
+  
+ // Makes Holy Word not target party:
+  
+ COPY_EXISTING 
+	"RATYR3.spl" override //  Holy Word, Tyr
+	"RATORM5.spl" override // Holy Word, Torm
+
+LPF ALTER_EFFECT INT_VAR match_opcode= 324 STR_VAR resource="%SOURCE_RES%" END
+IF_EXISTS BUT_ONLY
+
+// Makes Strength of One not override strength higher than 18/76:
+
+  COPY_EXISTING 
+	"RAARVO5.spl" override //  Strength of One, Arvoreen
+	"RATYR2.spl" override //  Strength of One, Tyr
+	"RACLAN3.spl" override //  Strength of One, Clangeddin
+
+LPF ALTER_EFFECT INT_VAR match_opcode= 318 STR_VAR resource="%SOURCE_RES%" END  
+IF_EXISTS BUT_ONLY
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+BEGIN "Deafness prevents hearing Rogue Rebalancing bard song" DESIGNATED 3030
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate:EE"
+REQUIRE_COMPONENT "setup-rr.tp2" 3 "This component requires Rogue Rebalancing to be installed"
+
+COPY_EXISTING
+                  "RR#BDF02.spl" 			override                                          // Rogue Rebalancing True Bard song
+                  "RR#BBL02.spl"			override                                         // Rogue Rebalancing Blade song
+                  "RR#BSK00.spl"			override                                         // Rogue Rebalancing Skald song
+                  "RR#BDF04.spl"			override                                         // Rogue Rebalancing True Bard Enhanced song
+                  "RR#BDF06.spl"			override                                         // Rogue Rebalancing True Bard Lingering song
+                  "RR#BSK02.spl"			override                                        // Rogue Rebalancing Skald Enhanced song
+                  "RR#BSK04.spl"			override                                        // Rogue Rebalancing Skald Lingering song
+  
+LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 318 target = 2 timing = 0 duration = 1 prob1 = 100 parameter2 = 66 STR_VAR resource = "%SOURCE_RES%" END
 
 IF_EXISTS BUT_ONLY
 
