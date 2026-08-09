@@ -494,37 +494,6 @@ COPY_EXISTING
 						STRING_SET_EVALUATE desc_strref "%desc%"
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-// PnP Ripper +2
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-
-BEGIN "BG1-style (also adds enchantment bonus to damage)" DESIGNATED 2510
-SUBCOMPONENT "PnP Ripper +2"
-REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2:EE"
-
-COPY_EXISTING
-			"BOW09.ITM" override
-						LPF ALTER_ITEM_HEADER INT_VAR damage_bonus = 5 END
-						WRITE_BYTE 0x28 0x1
-						READ_LONG 0x54 desc_strref
-						GET_STRREF desc_strref desc
-						INNER_PATCH_SAVE desc "%desc%" BEGIN
-				REPLACE_TEXTUALLY ~Damage:\([^(missile)]*\)~ ~Damage: +5 ~
-				REPLACE_TEXTUALLY ~18 Strength~ ~18/01 Strength~				END						IF_EXISTS BUT_ONLY
-						STRING_SET_EVALUATE desc_strref "%desc%"
-	
-BEGIN "BG2-style (only change minimum strength requirement)" DESIGNATED 2511 
-SUBCOMPONENT "PnP Ripper +2"
-	
-COPY_EXISTING
-			"BOW09.ITM" override
-						WRITE_BYTE 0x28 0x1
-						READ_LONG 0x54 desc_strref
-						GET_STRREF desc_strref desc
-						INNER_PATCH_SAVE desc "%desc%" BEGIN
-				REPLACE_TEXTUALLY ~18 Strength~ ~18/01 Strength~ END						IF_EXISTS BUT_ONLY
-						STRING_SET_EVALUATE desc_strref "%desc%"
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "SCS Rules For Deities of Faerûn Cleric Antimagic (Can Target Invisible)" DESIGNATED 3010
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "iwdee bgee bg2ee eet" "Game must be Baldur's Gate:EE"
