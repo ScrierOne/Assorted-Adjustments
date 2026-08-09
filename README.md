@@ -77,9 +77,9 @@ In Icewind Dale, Dispel (and Remove) Magic has a 100% success chance, which make
 
 Inspired by a similar component in Angel's Made in Heaven spell pack. Like that component, this makes it impossible to harm creatures frozen in time. This one is different in that it remains possible to harm creatures immune to time stop, so Ascension Balthazar and Melissan, for example, can keep duking it out during anybody's Time Stop.
 
-### PnP Strong Arm and Ripper
+### PnP Strong Arm 
 
-According to 2nd Edition PnP rules, the extra damage composite bows do is the strength damage bonus associated with the minimum strength required to wield them. This is how it works with BG1 composite bows: they require a 18 strength and give +2 damage, same as 18 STR gives for melee attacks. The Strong Arm requires 19 STR, so this mod gives it a +7 damage modifier. The Ripper gives an extra +1 damage over a regular composite longbow, so its STR requirement is increased to 18/01. Both can also be given an extra +2 to damage from their enchantment bonus, as in PnP and BG1.
+According to 2nd Edition PnP rules, the extra damage composite bows do is the strength damage bonus associated with the minimum strength required to wield them. This is how it works with BG1 composite bows: they require a 18 strength and give +2 damage, same as 18 STR gives for melee attacks. The Strong Arm requires 19 STR, so this mod gives it a +7 damage modifier.
 
 ### SCS Rules For Deities of Faerûn Cleric Antimagic (Can Target Invisible)
 
