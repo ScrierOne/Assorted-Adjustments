@@ -472,7 +472,7 @@ COPY_EXISTING
                   "mislead.spl"			override				// vanilla mislead
                   "g_misled.spl" 		override				// tnt Mislead
 LPF DELETE_EFFECT INT_VAR match_opcode = 144 match_parameter2 = 10 END
-
+IF_EXISTS BUT_ONLY
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Prevent Free Action from interfering with beneficial effects" DESIGNATED 2100
