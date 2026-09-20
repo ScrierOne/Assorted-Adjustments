@@ -3011,6 +3011,7 @@ END
 
 IF
 	GlobalGT("ShortDurationBuffs","LOCALS",0)
+	Global("ArmorOfFaithCast","LOCALS",0)
 	ActionListEmpty()
 	CombatCounter(0)
 	!Detect(NearestEnemyOf(Myself))
@@ -3020,6 +3021,7 @@ IF
 THEN
 	RESPONSE #100
 		Spell(Myself,CLERIC_ARMOR_OF_FAITH)  // SPPR111.SPL (Armor of Faith)
+		SetGlobal("ArmorOfFaithCast","LOCALS",1)
 END
 
 IF
@@ -3240,6 +3242,7 @@ IF
 THEN
 	RESPONSE #100
 		SetGlobal("ShortDurationBuffs","LOCALS",0)
+		SetGlobal("ArmorOfFaithCast","LOCALS",0)
 		SetGlobal("HolyMightCast","LOCALS",0)
 		SetGlobal("HolyPowerCast","LOCALS",0)
 		SetGlobal("EntropyShieldCast","LOCALS",0)
