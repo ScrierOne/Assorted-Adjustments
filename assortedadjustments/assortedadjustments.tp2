@@ -5,140 +5,6 @@ LANGUAGE
 "English"  ~assortedadjustments/english~ ~assortedadjustments/english/english.tra~
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-BEGIN "Reverse Fire Shield Resistances" DESIGNATED 2065
-/////////////////////////////////////////////////////////////////////////////////////////////////////
-REQUIRE_PREDICATE GAME_IS "iwdee bgee bg2ee eet" "Game must be Baldur's Gate EE"
-
-COPY_EXISTING_REGEXP GLOB ~^.+\.spl$~ ~override~
-
-READ_STRREF 0x0008 spell_name
-PATCH_IF ("%spell_name%" STRING_EQUAL_CASE ~Fireshield (Red)~ OR "%spell_name%" STRING_EQUAL_CASE ~Fireshield (Red) (cast previously)~) BEGIN
-  
-READ_LONG 0x50 desc_strref
-			GET_STRREF desc_strref desc
-SPRINT vulnerability_text @104
-SPRINT desc ~%desc%
-
-%vulnerability_text%~
-
-			INNER_PATCH_SAVE desc "%desc%" BEGIN
-				SPRINT old @102
-				SPRINT new @103
-			REPLACE_TEXTUALLY ~%old%~ ~%new%~ 
- END
-  
-	LPF DELETE_EFFECT INT_VAR match_opcode= 28 END // Remove existing cold resistance (such as added by DoF)
-	LPF DELETE_EFFECT INT_VAR match_opcode= 85 END
-
-// Flip existing fire resistance to a negative value:
- // The direct write must target the matching effect's parameter1.
-    // 0xFFFFFFCE is the 32-bit representation of -50.
-    GET_OFFSET_ARRAY headers SPL_V10_HEADERS
-
-    PHP_EACH headers AS header_index => header_offset BEGIN
-
-      GET_OFFSET_ARRAY2 effects header_offset
-        0x6A 4
-        0x1E 2
-        0x20 2
-        0x30
-
-      PHP_EACH effects AS effect_index => effect_offset BEGIN
-
-        READ_SHORT effect_offset opcode
-        READ_LONG  (effect_offset + 0x04) parameter1
-
-        PATCH_IF ((opcode = 84 OR opcode = 30) AND parameter1 = 50) BEGIN
-        WRITE_LONG (effect_offset + 0x04) 0xFFFFFFCE
-        END
-	END
-END
-
-// Clone the negative fire resistance effects into positive cold resistance effects:
-
-LPF CLONE_EFFECT INT_VAR match_opcode = 84 parameter1 = 75 opcode = 85 END
-LPF CLONE_EFFECT INT_VAR match_opcode = 30 parameter1 = 75 opcode = 28 END
-END
-BUT_ONLY IF_EXISTS 
-STRING_SET_EVALUATE desc_strref "%desc%"
-
-// Now same for blue fireshields:
-
-COPY_EXISTING_REGEXP GLOB ~^.+\.spl$~ ~override~
-
-READ_STRREF 0x0008 spell_name
-PATCH_IF ("%spell_name%" STRING_EQUAL_CASE ~Fireshield (Blue)~ OR "%spell_name%" STRING_EQUAL_CASE ~Fireshield (Blue) (cast previously)~) BEGIN
-
-READ_LONG 0x50 desc_strref
-			GET_STRREF desc_strref desc
-SPRINT vulnerability_text @105
-SPRINT desc ~%desc%
-
-%vulnerability_text%~
-
-			INNER_PATCH_SAVE desc "%desc%" BEGIN
-				SPRINT old @100
-				SPRINT new @101
-			REPLACE_TEXTUALLY ~%old%~ ~%new%~ 
- END
-  
-	LPF DELETE_EFFECT INT_VAR match_opcode= 30 END // Remove existing fire resistance (such as added by DoF)
-	LPF DELETE_EFFECT INT_VAR match_opcode= 84 END
-
-// Flip existing cold resistance to a negative value:
-
-    GET_OFFSET_ARRAY headers SPL_V10_HEADERS
-
-    PHP_EACH headers AS header_index => header_offset BEGIN
-
-      GET_OFFSET_ARRAY2 effects header_offset
-        0x6A 4
-        0x1E 2
-        0x20 2
-        0x30
-
-      PHP_EACH effects AS effect_index => effect_offset BEGIN
-
-        READ_SHORT effect_offset opcode
-        READ_LONG  (effect_offset + 0x04) parameter1
-
-        PATCH_IF ((opcode = 85 OR opcode = 28) AND parameter1 = 50) BEGIN
-        WRITE_LONG (effect_offset + 0x04) 0xFFFFFFCE
-        END
-	END
-END
-
-// Clone the negative cold resistance effects into positive fire resistance effects:
-
-LPF CLONE_EFFECT INT_VAR match_opcode = 85 parameter1 = 75 opcode = 84 END
-LPF CLONE_EFFECT INT_VAR match_opcode = 28 parameter1 = 75 opcode = 30 END
-END
-BUT_ONLY IF_EXISTS 
-STRING_SET_EVALUATE desc_strref "%desc%"
-
-// Change DoF Fireshield description:
-
-LAF RES_NUM_OF_SPELL_NAME 
-	STR_VAR spell_name = CLERIC_RADUZIEL_FIRESHIELD
-	RET spell_res
-END
-
-COPY_EXISTING 
-~%spell_res%.spl~ override
-				SAY UNIDENTIFIED_DESC @106
-BUT_ONLY IF_EXISTS 
-
-LAF RES_NUM_OF_SPELL_NAME 
-	STR_VAR spell_name = WIZARD_RADUZIEL_FIRESHIELD
-	RET spell_res
-END
-
-COPY_EXISTING 
-~%spell_res%.spl~ override
-				SAY UNIDENTIFIED_DESC @107
-BUT_ONLY IF_EXISTS 
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "PnP/IWD-style progression cap (no XP cap, max 30 levels in each class)" DESIGNATED 1010
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2"
@@ -371,6 +237,140 @@ BUT_ONLY IF_EXISTS
 COPY_EXISTING "SCRL1P.ITM" override // Skull Trap Scroll
 		SAY DESC @50
 IF_EXISTS BUT_ONLY
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+BEGIN "Reverse Fire Shield Resistances" DESIGNATED 2065
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+REQUIRE_PREDICATE GAME_IS "iwdee bgee bg2ee eet" "Game must be Baldur's Gate EE"
+
+COPY_EXISTING_REGEXP GLOB ~^.+\.spl$~ ~override~
+
+READ_STRREF 0x0008 spell_name
+PATCH_IF ("%spell_name%" STRING_EQUAL_CASE ~Fireshield (Red)~ OR "%spell_name%" STRING_EQUAL_CASE ~Fireshield (Red) (cast previously)~) BEGIN
+  
+READ_LONG 0x50 desc_strref
+			GET_STRREF desc_strref desc
+SPRINT vulnerability_text @104
+SPRINT desc ~%desc%
+
+%vulnerability_text%~
+
+			INNER_PATCH_SAVE desc "%desc%" BEGIN
+				SPRINT old @102
+				SPRINT new @103
+			REPLACE_TEXTUALLY ~%old%~ ~%new%~ 
+ END
+  
+	LPF DELETE_EFFECT INT_VAR match_opcode= 28 END // Remove existing cold resistance (such as added by DoF)
+	LPF DELETE_EFFECT INT_VAR match_opcode= 85 END
+
+// Flip existing fire resistance to a negative value:
+ // The direct write must target the matching effect's parameter1.
+    // 0xFFFFFFCE is the 32-bit representation of -50.
+    GET_OFFSET_ARRAY headers SPL_V10_HEADERS
+
+    PHP_EACH headers AS header_index => header_offset BEGIN
+
+      GET_OFFSET_ARRAY2 effects header_offset
+        0x6A 4
+        0x1E 2
+        0x20 2
+        0x30
+
+      PHP_EACH effects AS effect_index => effect_offset BEGIN
+
+        READ_SHORT effect_offset opcode
+        READ_LONG  (effect_offset + 0x04) parameter1
+
+        PATCH_IF ((opcode = 84 OR opcode = 30) AND parameter1 = 50) BEGIN
+        WRITE_LONG (effect_offset + 0x04) 0xFFFFFFCE
+        END
+	END
+END
+
+// Clone the negative fire resistance effects into positive cold resistance effects:
+
+LPF CLONE_EFFECT INT_VAR match_opcode = 84 parameter1 = 75 opcode = 85 END
+LPF CLONE_EFFECT INT_VAR match_opcode = 30 parameter1 = 75 opcode = 28 END
+END
+BUT_ONLY IF_EXISTS 
+STRING_SET_EVALUATE desc_strref "%desc%"
+
+// Now same for blue fireshields:
+
+COPY_EXISTING_REGEXP GLOB ~^.+\.spl$~ ~override~
+
+READ_STRREF 0x0008 spell_name
+PATCH_IF ("%spell_name%" STRING_EQUAL_CASE ~Fireshield (Blue)~ OR "%spell_name%" STRING_EQUAL_CASE ~Fireshield (Blue) (cast previously)~) BEGIN
+
+READ_LONG 0x50 desc_strref
+			GET_STRREF desc_strref desc
+SPRINT vulnerability_text @105
+SPRINT desc ~%desc%
+
+%vulnerability_text%~
+
+			INNER_PATCH_SAVE desc "%desc%" BEGIN
+				SPRINT old @100
+				SPRINT new @101
+			REPLACE_TEXTUALLY ~%old%~ ~%new%~ 
+ END
+  
+	LPF DELETE_EFFECT INT_VAR match_opcode= 30 END // Remove existing fire resistance (such as added by DoF)
+	LPF DELETE_EFFECT INT_VAR match_opcode= 84 END
+
+// Flip existing cold resistance to a negative value:
+
+    GET_OFFSET_ARRAY headers SPL_V10_HEADERS
+
+    PHP_EACH headers AS header_index => header_offset BEGIN
+
+      GET_OFFSET_ARRAY2 effects header_offset
+        0x6A 4
+        0x1E 2
+        0x20 2
+        0x30
+
+      PHP_EACH effects AS effect_index => effect_offset BEGIN
+
+        READ_SHORT effect_offset opcode
+        READ_LONG  (effect_offset + 0x04) parameter1
+
+        PATCH_IF ((opcode = 85 OR opcode = 28) AND parameter1 = 50) BEGIN
+        WRITE_LONG (effect_offset + 0x04) 0xFFFFFFCE
+        END
+	END
+END
+
+// Clone the negative cold resistance effects into positive fire resistance effects:
+
+LPF CLONE_EFFECT INT_VAR match_opcode = 85 parameter1 = 75 opcode = 84 END
+LPF CLONE_EFFECT INT_VAR match_opcode = 28 parameter1 = 75 opcode = 30 END
+END
+BUT_ONLY IF_EXISTS 
+STRING_SET_EVALUATE desc_strref "%desc%"
+
+// Change DoF Fireshield description:
+
+LAF RES_NUM_OF_SPELL_NAME 
+	STR_VAR spell_name = CLERIC_RADUZIEL_FIRESHIELD
+	RET spell_res
+END
+
+COPY_EXISTING 
+~%spell_res%.spl~ override
+				SAY UNIDENTIFIED_DESC @106
+BUT_ONLY IF_EXISTS 
+
+LAF RES_NUM_OF_SPELL_NAME 
+	STR_VAR spell_name = WIZARD_RADUZIEL_FIRESHIELD
+	RET spell_res
+END
+
+COPY_EXISTING 
+~%spell_res%.spl~ override
+				SAY UNIDENTIFIED_DESC @107
+BUT_ONLY IF_EXISTS 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Cure spells won't affect undead and constructs" DESIGNATED 2070
@@ -687,7 +687,6 @@ LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 36 parameter1 = 2 END
 LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 37 parameter1 = 2 END
 LPF ADD_ITEM_EFFECT INT_VAR insert_point = 0 opcode = 321 STR_VAR resource = "potn11" END
 BUT_ONLY IF_EXISTS
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "SCS Rules For Deities of Faerûn Cleric Antimagic (Can Target Invisible)" DESIGNATED 3010
