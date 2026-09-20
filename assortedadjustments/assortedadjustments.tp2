@@ -762,7 +762,7 @@ IF_EXISTS BUT_ONLY
 BEGIN "Deafness prevents hearing Rogue Rebalancing bard song" DESIGNATED 3030
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate:EE"
-REQUIRE_COMPONENT "setup-rr.tp2" 3 "This component requires Rogue Rebalancing to be installed"
+REQUIRE_COMPONENT "setup-rr.tp2" 4 "This component requires Rogue Rebalancing to be installed"
 
 COPY_EXISTING
                   "RR#BDF02.spl" 			override                                          // Rogue Rebalancing True Bard song
