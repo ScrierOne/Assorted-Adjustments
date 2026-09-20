@@ -198,11 +198,11 @@ Weight: 1~
 
 // Reversed Fireshield resistances
 
-@100=~+50% Cold Resistance~
-@101=~+75% Fire Resistance~
+@100=~50% Cold Resistance~
+@101=~75% Fire Resistance~
 
-@102=~+50% Fire Resistance~
-@103=~+75% Cold Resistance~
+@102=~50% Fire Resistance~
+@103=~75% Cold Resistance~
 
 @104=~Being wreathed in an aura of blazing heat applies a -50% penalty to the caster's fire resistance.~
 @105=~Being wreathed in an aura of freezing cold applies a -50% penalty to the caster's cold resistance.~
