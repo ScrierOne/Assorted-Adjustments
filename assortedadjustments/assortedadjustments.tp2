@@ -350,6 +350,21 @@ END
 BUT_ONLY IF_EXISTS 
 STRING_SET_EVALUATE desc_strref "%desc%"
 
+// Staff of Fire description:
+
+ACTION_IF (FILE_EXISTS_IN_GAME ~staf17.itm~)BEGIN
+		COPY_EXISTING "staf17.itm" override
+			READ_LONG 0x54 desc_strref
+			GET_STRREF desc_strref desc
+			INNER_PATCH_SAVE desc "%desc%" BEGIN
+				SPRINT old @108
+				SPRINT new @109
+				REPLACE_TEXTUALLY EXACT_MATCH "%old%" "%new%"
+			END
+		BUT_ONLY IF_EXISTS 
+		STRING_SET_EVALUATE desc_strref "%desc%"
+     END
+
 // Change DoF Fireshield description:
 
 LAF RES_NUM_OF_SPELL_NAME 
