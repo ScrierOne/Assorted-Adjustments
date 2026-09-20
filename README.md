@@ -1,5 +1,5 @@
 # Assorted-Adjustments
-A selection of tweaks for Beamdog's Enhanced Editions for the Baldur's Gate and Icewind Dale games.
+A selection of tweaks for Beamdog's Enhanced Editions for the Baldur's Gate and Icewind Dale games. Some of these may also exist in other mods that I don't or didn't know about at the time, or that do things slightly differently, but mostly these are things that I've wanted to have in my own game and decided to learn how to make instead of just waiting and hoping someone else would.
 
 ### PnP/IWD-Style progression cap (no XP cap, max 30 levels in each class)
 
@@ -41,6 +41,10 @@ Adds +1 APR for casters who don't already get extra attacks from their class.
 
 Skull Trap does 2d4 + (1d4*level) damage, only affects living creatures, and has a casting time of 4 instead of 3. The changes are taken from AD&D 2nd Edition source material, and make the spell more distinct from (and maybe not as clearly always superior to) Fireball.
 
+### Reverse Fire Shield Resistances (PnP-like)
+
+In PnP, a warm shield protects you from the cold and vice versa, which makes sense. The shields also make you somewhat more vulnerable to the element they're made of, which also makes sense. Surely, you'll be in more danger of getting uncomfortably hot if you've lit the air around yourself on fire. The PnP spell implements this in a particular way that I don't know can be translated into the Infinity Engine: i.e. a warm shield means you take no damage from cold-based spells on a successful save and half damage on a failed one, and double damage from fire spells, but on a failed save only. To somewhat approximate that, the resistances granted by fireshields under this tweak are +75 and -50%.
+
 ### Cure spells won't affect undead and constructs
 
 According to PnP rules (and common sense, IMO), Cure spells should not affect the non-living.
@@ -80,6 +84,14 @@ Inspired by a similar component in Angel's Made in Heaven spell pack. Like that 
 ### PnP Strong Arm 
 
 According to 2nd Edition PnP rules, the extra damage composite bows do is the strength damage bonus associated with the minimum strength required to wield them. This is how it works with BG1 composite bows: they require a 18 strength and give +2 damage, same as 18 STR gives for melee attacks. The Strong Arm requires 19 STR, so this mod gives it a +7 damage modifier.
+
+### Un-Nerfed Elemental Arrows
+
+Gives elemental arrows their BG1/IWD elemental damage bonuses.
+
+### PnP Potion of Invulnerability
+
+Grants +2 to AC and saves, instead of setting AC to 0 and granting +5 to saves.
 
 ### SCS Rules For Deities of Faerûn Cleric Antimagic (Can Target Invisible)
 
