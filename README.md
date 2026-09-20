@@ -165,11 +165,15 @@ I like Imoen's original BG2 portrait, but it doesn't match the hooded Rogue spri
 
 <img width="210" height="330" alt="NIMOENL" src="https://github.com/user-attachments/assets/bc5f5251-e62f-4bd3-a985-9237d6ebbbaa" />
 
-### Give Belhifet a customportrait
+### Give Belhifet a custom portrait
 
 A custom portrait I created for Belhifet, initially from an AI prompt, then painting over the result, then compositing the result with some stock photos, then running the whole thing through a different AI, then compositing again, then hand painting again, et cetera. I think it actually looks lore accurate, but in any event it took too much effort not to share somewhere. Includes a portrait for the mysterious voice Hephernaan communicates with, as well.
 
 <img width="2375" height="1347" alt="Belhifet" src="https://github.com/user-attachments/assets/e074d45b-dc2d-4f41-8365-35b6c1ba813e" />
+
+### PnP-Legal Starting Proficiencies For Anomen
+
+Anomen in ogBG2 had too few proficiencies for his build, only six instead of the ten he was supposed to have. The Enhanced Edition gave him four more, two of them uselessly in spears, presumably for balance reasons, and the rest distributed in a PnP-illegal way: he has four specializations, when he could only have gotten 3 during his Fighter career. This, of course, is perfectly in line with BG2's implementation of the rules, where you can continue putting points in Fighter proficiencies all the way up to grand mastery even after abandoning Fighter progression. People who don't like that mechanic can choose not to do that, but he's already breaking the rules before he even joins the party! With this tweak, Anomen is specialized in Maces, Slings, and Flails, and proficient in War Hammer, Quarter Staff, Sword And Shield Style, and Two-Handed Weapon Style.
 
 ### Lazy Companion AI 
 
