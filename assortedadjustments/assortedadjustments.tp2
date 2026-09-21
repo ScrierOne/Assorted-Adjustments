@@ -290,8 +290,8 @@ END
 
 // Clone the negative fire resistance effects into positive cold resistance effects:
 
-LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 84 parameter1 = 75 opcode = 85 END
-LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 30 parameter1 = 75 opcode = 28 END
+LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 84 parameter1 = 50 opcode = 85 END
+LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 30 parameter1 = 50 opcode = 28 END
 END
 BUT_ONLY IF_EXISTS 
 STRING_SET_EVALUATE desc_strref "%desc%"
@@ -344,8 +344,8 @@ END
 
 // Clone the negative cold resistance effects into positive fire resistance effects:
 
-LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 85 parameter1 = 75 opcode = 84 END
-LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 28 parameter1 = 75 opcode = 30 END
+LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 85 parameter1 = 50 opcode = 84 END
+LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 28 parameter1 = 50 opcode = 30 END
 END
 BUT_ONLY IF_EXISTS 
 STRING_SET_EVALUATE desc_strref "%desc%"
