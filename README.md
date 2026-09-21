@@ -41,9 +41,9 @@ Adds +1 APR for casters who don't already get extra attacks from their class.
 
 Skull Trap does 2d4 + (1d4*level) damage, only affects living creatures, and has a casting time of 4 instead of 3. The changes are taken from AD&D 2nd Edition source material, and make the spell more distinct from (and maybe not as clearly always superior to) Fireball.
 
-### Reverse Fire Shield Resistances (PnP-like)
+### PnP-like Fireshields
 
-In PnP, a warm shield protects you from the cold and vice versa, which makes sense. The shields also make you somewhat more vulnerable to the element they're made of, which also makes sense. Surely, you'll be in more danger of getting uncomfortably hot if you've lit the air around yourself on fire. The PnP spell implements this in a particular way that I don't know can be translated into the Infinity Engine: i.e. a warm shield means you take no damage from cold-based spells on a successful save and half damage on a failed one, and double damage from fire spells, but on a failed save only. To somewhat approximate that, the resistances granted by fireshields under this tweak are +75 and -50%.
+In PnP (and IWD2), a warm shield protects you from the cold and vice versa, which makes sense. The shields also make you somewhat more vulnerable to the element they're made of, which also makes sense. The way it's done in PnP spell does can't, as far as I know, be implemented in the Infinity Engine (a warm shield means you take no damage at all from cold-based spells on a successful save, and half damage on a failed one, and double damage from fire spells, but on a failed save only), but to somewhat approximate that, the fireshields also penalize resistance to their own element by -50%.
 
 ### Cure spells won't affect undead and constructs
 
