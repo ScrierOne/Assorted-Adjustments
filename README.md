@@ -143,7 +143,7 @@ Give BG2 Imoen her BG1 character colors
 <img width="3963" height="1221" alt="sprites" src="https://github.com/user-attachments/assets/b9720cb8-39e5-4d92-9c34-05892e708a09" />
 
 
-These are purely cosmetic changes, and fairly self-evident. The credit for most of these animations goes to the Infinity Animations mod, though some of the devils were scaled down a bit from that mod's baseline.
+These are purely cosmetic changes, and fairly self-evident. The credit for most of these animations goes to the Infinity Animations mod, though I scaled some of the devils down a bit from that mod's baseline; both to match their PnP descriptions and to keep them proportional to the vanilla animations.
 
 ### Change Rogue Rebalancing Drow Chain Mail colors
 
