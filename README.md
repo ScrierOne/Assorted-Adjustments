@@ -43,7 +43,7 @@ Skull Trap does 2d4 + (1d4*level) damage, only affects living creatures, and has
 
 ### PnP-like Fireshields
 
-In PnP (and IWD2), a warm shield protects you from the cold and vice versa, which makes sense. The shields also make you somewhat more vulnerable to the element they're made of, which also makes sense. The way it's done in PnP spell does can't, as far as I know, be implemented in the Infinity Engine (a warm shield means you take no damage at all from cold-based spells on a successful save, and half damage on a failed one, and double damage from fire spells, but on a failed save only), but to somewhat approximate that, the fireshields also penalize resistance to their own element by -50%.
+In PnP (and IWD2), a warm shield protects you from the cold and vice versa, which is what makes intuitive sense to me. The shields also make you somewhat more vulnerable to the element they're made of, which also makes sense. The way it's done in PnP can't, as far as I know, be implemented in the Infinity Engine (a warm shield means you take no damage at all from cold-based spells on a successful save, and half damage on a failed one, and double damage from fire spells, but on a failed save only), but to somewhat approximate that, the fireshields also penalize resistance to their own element by -50%.
 
 ### Cure spells won't affect undead and constructs
 
