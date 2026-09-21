@@ -85,9 +85,9 @@ Inspired by a similar component in Angel's Made in Heaven spell pack. Like that 
 
 According to 2nd Edition PnP rules, the extra damage composite bows do is the strength damage bonus associated with the minimum strength required to wield them. This is how it works with BG1 composite bows: they require a 18 strength and give +2 damage, same as 18 STR gives for melee attacks. The Strong Arm requires 19 STR, so this mod gives it a +7 damage modifier.
 
-### Un-Nerfed Elemental Arrows
+### PnP (Un-Nerfed) Elemental Arrows
 
-Gives elemental arrows their BG1/IWD elemental damage bonuses.
+Gives elemental arrows their PnP/BG1/IWD elemental damage bonuses in BG2.
 
 ### PnP Potion of Invulnerability
 
