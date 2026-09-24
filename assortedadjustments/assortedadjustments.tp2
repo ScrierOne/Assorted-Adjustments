@@ -1213,7 +1213,7 @@ COPY_EXISTING
 	
 BUT_ONLY IF_EXISTS
 
-BEGIN "Slightly Improved (Specialized in Flails, Proficient in Slings)" DESIGNATED 5087 
+BEGIN "Alternate (Specialized in Flails, Proficient in Slings)" DESIGNATED 5087 
 SUBCOMPONENT "PnP-Legal Starting Proficiencies For Anomen"
 REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2"
 
