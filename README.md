@@ -167,7 +167,11 @@ I like Imoen's original BG2 portrait, but it doesn't match the hooded Rogue spri
 
 ### PnP-Legal Starting Proficiencies For Anomen
 
-Anomen in ogBG2 had too few proficiencies for his build, only six instead of the ten he was supposed to have. The Enhanced Edition gave him four more, two of them uselessly in spears, presumably for balance reasons, and the rest distributed in a PnP-illegal way: he has four specializations, when he could only have gotten 3 during his Fighter career. This, of course, is perfectly in line with BG2's implementation of the rules, where you can continue putting points in Fighter proficiencies all the way up to grand mastery even after abandoning Fighter progression. People who don't like that mechanic can choose not to do that, but he's already breaking the rules before he even joins the party! With this tweak, Anomen is specialized in Maces, Slings, and Flails, and proficient in War Hammer, Quarter Staff, Sword And Shield Style, and Two-Handed Weapon Style.
+BG2's implementation of dual-classing rules allows Warrior-to-something-else duals to continue putting points into weapon proficiencies as though they were still Warriors. Especially egregiously, Fighter duals can even still reach grand mastery! There are mods to change this (I use [Dual to kit](https://forums.beamdog.com/discussion/66521/enable-dual-classing-into-kits-now-with-proficiency-fix/p1) by kjeron), but Anomen has illegal proficiencies before even joining the party.
+
+In Classic BG2, he had too few proficiencies for his build, only six instead of the ten he was supposed to have. The Enhanced Edition gave him four more, two of them in spears and two in Sword & Shield Style. This, however, gives him four specializations when he could only have attained three during his Fighter career. 
+
+Comes in two flavors: The strict one is the Enhanced Edition Anomen, with one point from Sword & Shield Style moved to Flails. The alternate one has two points in Flails and only one in Slings.
 
 ### Give Belhifet a custom portrait
 
