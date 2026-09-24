@@ -1172,8 +1172,11 @@ COPY_EXISTING
 IF_EXISTS BUT_ONLY
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-BEGIN "PnP-Legal Starting Proficiencies For Anomen" DESIGNATED 5086
+// "PnP-Legal Starting Proficiencies For Anomen"
 /////////////////////////////////////////////////////////////////////////////////////////////////////
+
+BEGIN "Strict (Specialized in Slings, Proficient in Flails)" DESIGNATED 5086 
+SUBCOMPONENT "PnP-Legal Starting Proficiencies For Anomen"
 REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2"
 
 COPY_EXISTING 
@@ -1182,30 +1185,68 @@ COPY_EXISTING
 	"anomen8.cre" override
 	"anomen9.cre" override
 
+// Taken on Fighter levels:
 	LPF DELETE_CRE_EFFECT INT_VAR opcode_to_delete = 233 END
-	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 2 parameter2 = 100 END // Flail/Morningstar
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 2 parameter2 = 98 END // Spear
 	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 2 parameter2 = 101 END // Mace
 	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 2 parameter2 = 107 END // Sling
-	
+// Taken on Cleric levels:	
 	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 97 END // Warhammer
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 100 END // Flail
 	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 102 END // Quarterstaff
-	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 111 END // Two-Handed Weapon Style
 	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 112 END // Sword & Shield Style
 
 COPY_EXISTING 
 	"anomen10.cre" override
 	"anomen12.cre" override
-	
+// Taken on Fighter levels:	
 	LPF DELETE_CRE_EFFECT INT_VAR opcode_to_delete = 233 END
-	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 2 parameter2 = 100 END // Flail/Morningstar
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 2 parameter2 = 98 END // Spear
 	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 2 parameter2 = 101 END // Mace
 	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 2 parameter2 = 107 END // Sling
-	
+// Taken on Cleric levels:	
 	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 97 END // Warhammer
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 100 END // Flail
 	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 102 END // Quarterstaff
-	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 111 END // Two-Handed Weapon Style
 	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 112 END // Sword & Shield Style
-	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 115 END // Club
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 111 END // Two-Handed Weapon Style
+	
+BUT_ONLY IF_EXISTS
+
+BEGIN "Slightly Improved (Specialized in Flails, Proficient in Slings)" DESIGNATED 5087 
+SUBCOMPONENT "PnP-Legal Starting Proficiencies For Anomen"
+REQUIRE_PREDICATE GAME_IS "bg2ee eet" "Game must be Baldur's Gate 2"
+
+COPY_EXISTING 
+	"anomen6.cre" override
+	"anomen7.cre" override
+	"anomen8.cre" override
+	"anomen9.cre" override
+// Taken on Fighter levels:
+	LPF DELETE_CRE_EFFECT INT_VAR opcode_to_delete = 233 END
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 2 parameter2 = 98 END // Spear	
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 2 parameter2 = 100 END // Flail
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 2 parameter2 = 101 END // Mace
+// Taken on Cleric levels:		
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 97 END // Warhammer
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 107 END // Sling
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 102 END // Quarterstaff
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 112 END // Sword & Shield Style
+
+COPY_EXISTING 
+	"anomen10.cre" override
+	"anomen12.cre" override
+// Taken on Fighter levels:	
+	LPF DELETE_CRE_EFFECT INT_VAR opcode_to_delete = 233 END
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 2 parameter2 = 98 END // Spear	
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 2 parameter2 = 100 END // Flail
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 2 parameter2 = 101 END // Mace
+// Taken on Cleric levels:		
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 97 END // Warhammer
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 107 END // Sling
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 102 END // Quarterstaff
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 112 END // Sword & Shield Style
+	LPF ADD_CRE_EFFECT INT_VAR opcode = 233 timing = 9 parameter1 = 1 parameter2 = 111 END // Two-Handed Weapon Style
 	
 BUT_ONLY IF_EXISTS
 
