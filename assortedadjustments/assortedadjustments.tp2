@@ -1063,6 +1063,26 @@ COPY_EXISTING
 	"bddispbp.cre" override 
 			WRITE_SHORT 0x28 0x7002 //Animation (displacer_beast_nwn)
 	BUT_ONLY IF_EXISTS
+	
+////////////////////////////////////////////////////////////////////////////////////////////////////
+BEGIN "Give Viconia a hooded (Rogue) animation" DESIGNATED 5079
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet" "Game must be Baldur's Gate"
+
+COPY_EXISTING
+	"viconi.cre" override
+	"viconi4.cre" override
+	"viconi6.cre" override
+	"viconi7.cre" override
+	"viconi8.cre" override
+	"viconi9.cre" override
+	"viconi11.cre" override
+	"viconi13.cre" override
+	"viconi16.cre" override
+	"vampvic.cre" override
+		WRITE_LONG 0x028 0x6311
+IF_EXISTS 
+BUT_ONLY
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Give Viconia her Sharran character colors from Siege of Dragonspear in BG1/BG2" DESIGNATED 5080
