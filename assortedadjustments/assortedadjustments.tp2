@@ -688,12 +688,14 @@ BEGIN "PnP Potion of Invulnerability" DESIGNATED 2550
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet iwdee" "Game must be EE "
 
+ACTION_IF (!MOD_IS_INSTALLED "setup-tnt.tp2" 46) BEGIN
 COPY_EXISTING 
 	"potn11.itm" override
 
 SAY DESC @90 
 LPF ALTER_EFFECT INT_VAR match_opcode = 0 parameter1 = 2 parameter2 = 0 END		
-LPF ADD_ITEM_EFFECT INT_VAR opcode = 142 parameter2 = 70 duration = 60 END
+LPF ADD_ITEM_EFFECT INT_VAR opcode = 120 parameter2 = 2 target = 2 timing = 0 resist_dispel = 3 duration = 60 END
+LPF ADD_ITEM_EFFECT INT_VAR opcode = 142 parameter2 = 70 target = 2 timing = 0 resist_dispel = 3 duration = 60 END
 LPF ALTER_EFFECT INT_VAR silent = 1 match_duration = 300 duration = 60 END
 LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 33 parameter1 = 2 END
 LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 34 parameter1 = 2 END
@@ -702,6 +704,25 @@ LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 36 parameter1 = 2 END
 LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 37 parameter1 = 2 END
 LPF ADD_ITEM_EFFECT INT_VAR insert_point = 0 opcode = 321 STR_VAR resource = "potn11" END
 BUT_ONLY IF_EXISTS
+END
+
+// If TnT Potions don't stack is installed, alter that instead
+
+ACTION_IF (MOD_IS_INSTALLED "setup-tnt.tp2" 46) BEGIN
+COPY_EXISTING 
+	"g_potn11.spl" override
+
+LPF ALTER_EFFECT INT_VAR match_opcode = 0 parameter1 = 2 parameter2 = 0 END		
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 142 target = 1 timing = 0 resist_dispel = 3 parameter2 = 70 duration = 60 END
+LPF ADD_SPELL_EFFECT INT_VAR opcode = 120 target = 1 timing = 0 resist_dispel = 3 parameter2 = 2 duration = 60 END
+LPF ALTER_EFFECT INT_VAR silent = 1 match_duration = 300 duration = 60 END
+LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 33 parameter1 = 2 END
+LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 34 parameter1 = 2 END
+LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 35 parameter1 = 2 END
+LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 36 parameter1 = 2 END
+LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 37 parameter1 = 2 END
+BUT_ONLY IF_EXISTS
+END
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "SCS Rules For Deities of Faerûn Cleric Antimagic (Can Target Invisible)" DESIGNATED 3010
