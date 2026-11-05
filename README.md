@@ -89,6 +89,10 @@ According to 2nd Edition PnP rules, the extra damage composite bows do is the st
 
 Gives elemental arrows their PnP/BG1/IWD elemental damage bonuses in BG2.
 
+### Accurate item description for Arrows of Biting
+
+Makes the description of Arrows of Biting reflect their actualy functionality: they do 1 poison damage per second for 20 seconds, not "30% of total maximum Hit Points" like the vanilla description erroneously states.
+
 ### PnP Potion of Invulnerability
 
 Grants +2 to AC and saves, instead of setting AC to 0 and granting +5 to saves.
