@@ -196,6 +196,18 @@ Duration: 1 turn
 
 Weight: 1~
 
+@95=~This arrow was designed as a deadly complement to the archer. Poison smeared on the barbed arrowhead infiltrates the bloodstream of its victims, causing agony and often death.
+
+STATISTICS:
+
+Combat abilities:
+– Hit target takes 1 point of poison damage per second for 20 seconds (Save vs. Poison negates)
+
+Damage: 1d6 (missile)
+Launcher: Bow
+
+Weight: 0~
+
 // Reversed Fireshield resistances
 
 @100=~50% Cold Resistance~
