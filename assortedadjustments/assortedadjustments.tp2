@@ -243,6 +243,10 @@ BEGIN "PnP-like Fireshields" DESIGNATED 2065
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 REQUIRE_PREDICATE GAME_IS "iwdee bgee bg2ee eet" "Game must be Baldur's Gate EE"
 
+COPY
+	"%MOD_FOLDER%/Spell/fvul.spl" override
+	"%MOD_FOLDER%/Spell/cvul.spl" override
+
 COPY_EXISTING_REGEXP GLOB ~^.+\.spl$~ ~override~
 
 READ_STRREF 0x0008 spell_name
@@ -288,10 +292,20 @@ SPRINT desc ~%desc%
 	END
 END
 
+LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 142 match_parameter2 = 16 parameter2 = 25  END // Switch Protected From Fire/Cold Icon
+
 // Clone the negative fire resistance effects into positive cold resistance effects:
 
 LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 84 parameter1 = 50 opcode = 85 END
 LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 30 parameter1 = 50 opcode = 28 END
+
+// Elementals and Efreeti using fireshields gain +50 Fire resistance to compensate for the vulnerability:
+
+	PATCH_FOR_EACH race IN ELEMENTAL GENIE BEGIN
+			parameter1=IDS_OF_SYMBOL (race "%race%")
+			LPF ADD_SPELL_EFFECT INT_VAR insert_point=0 opcode=326 target=2 duration=1 parameter1 parameter2=104  STR_VAR resource="fvul" END
+		END 
+
 END
 BUT_ONLY IF_EXISTS 
 STRING_SET_EVALUATE desc_strref "%desc%"
@@ -342,13 +356,34 @@ SPRINT desc ~%desc%
 	END
 END
 
+LPF ALTER_EFFECT INT_VAR silent = 1 match_opcode = 142 match_parameter2 = 25 parameter2 = 16  END // Switch Protected From Fire/Cold Icon
+
 // Clone the negative cold resistance effects into positive fire resistance effects:
 
 LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 85 parameter1 = 50 opcode = 84 END
 LPF CLONE_EFFECT INT_VAR silent = 1 match_opcode = 28 parameter1 = 50 opcode = 30 END
+
+// Elementals using blue fireshields, if any, are given +50 Cold resistance to compensate:
+
+	PATCH_FOR_EACH race IN ELEMENTAL GENIE BEGIN
+			parameter1=IDS_OF_SYMBOL (race "%race%")
+			LPF ADD_SPELL_EFFECT INT_VAR insert_point=0 opcode=326 target=2 duration=1 parameter1 parameter2=104  STR_VAR resource="cvul" END
+		END 
+
+
 END
 BUT_ONLY IF_EXISTS 
 STRING_SET_EVALUATE desc_strref "%desc%"
+
+// aTweaks Elementals Imix & Zaaman Rul
+
+COPY_EXISTING
+"RR#EIMFS.spl" override
+"RR#EZAFS.spl" override
+
+LPF DELETE_EFFECT INT_VAR match_opcode = 30 END
+LPF DELETE_EFFECT INT_VAR match_opcode = 84 END
+BUT_ONLY IF_EXISTS 
 
 // Staff of Fire description:
 
@@ -682,6 +717,17 @@ COPY_EXISTING
 				REPLACE_TEXTUALLY ~+1d3~ ~+2d6~ END
 BUT_ONLY IF_EXISTS 
 STRING_SET_EVALUATE desc_strref "%desc%"
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+BEGIN "Accurate item description for Arrows of Biting" DESIGNATED 2511
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet iwdee" "Game must be Baldur's Gate 2"
+
+COPY_EXISTING
+	"AROW05.ITM" override 
+	"AROW12.ITM" override // undroppable version, just for consistency
+SAY DESC @95 
+BUT_ONLY IF_EXISTS 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "PnP Potion of Invulnerability" DESIGNATED 2550
