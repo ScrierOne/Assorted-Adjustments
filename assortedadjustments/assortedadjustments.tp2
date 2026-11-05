@@ -721,7 +721,7 @@ STRING_SET_EVALUATE desc_strref "%desc%"
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Accurate item description for Arrows of Biting" DESIGNATED 2511
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet iwdee" "Game must be Baldur's Gate 2"
+REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet iwdee" "Game must be Enhanced Edition"
 
 COPY_EXISTING
 	"AROW05.ITM" override 
