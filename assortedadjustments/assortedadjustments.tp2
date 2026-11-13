@@ -206,15 +206,15 @@ REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet iwdee" "Game must be EE "
 COPY_EXISTING 
 	"spwi313.spl" override // Skull Trap
 		SAY UNIDENTIFIED_DESC @50
-			LPF ADD_SPELL_EFFECT INT_VAR insert_point=0 opcode=324 target=2 duration=1 parameter2=1  STR_VAR resource="%SOURCE_RES%" END // undead
+			LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 324 target = 2 duration = 1 parameter2 = 1  STR_VAR resource="%SOURCE_RES%" END // undead
 	PATCH_FOR_EACH race IN GOLEM SWORD BEGIN
 			parameter1=IDS_OF_SYMBOL (race "%race%")
-			LPF ADD_SPELL_EFFECT INT_VAR insert_point=0 opcode=324 target=2 duration=1 parameter1 parameter2=104  STR_VAR resource="%SOURCE_RES%" END
+			LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 324 target = 2 duration = 1 parameter1 parameter2 = 104  STR_VAR resource="%SOURCE_RES%" END
 		END // Construct
 		        LPF ALTER_SPELL_HEADER INT_VAR speed = 4 END		// Casting time increased from 3 to 4
   FOR (n = 0; n < 46; ++n) BEGIN														// Dice rolled
     SET amount = n + 7
-    LPF ALTER_EFFECT INT_VAR silent=1 header=n match_opcode=12 dicenumber=amount dicesize=4 END
+    LPF ALTER_EFFECT INT_VAR silent = 1 header = n match_opcode = 12 dicenumber=amount dicesize = 4 parameter1 = 0 END
   END
 BUT_ONLY IF_EXISTS 
 
@@ -222,15 +222,15 @@ COPY_EXISTING
 	"rawi313.spl" override // DOF Cleric Skull Trap
 	"RAJERG2.spl" override
 		SAY UNIDENTIFIED_DESC @51
-			LPF ADD_SPELL_EFFECT INT_VAR insert_point=0 opcode=324 target=2 duration=1 parameter2=1  STR_VAR resource="%SOURCE_RES%" END // undead
+			LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 324 target = 2 duration = 1 parameter2 = 1  STR_VAR resource="%SOURCE_RES%" END // undead
 	PATCH_FOR_EACH race IN GOLEM SWORD BEGIN
 			parameter1=IDS_OF_SYMBOL (race "%race%")
-			LPF ADD_SPELL_EFFECT INT_VAR insert_point=0 opcode=324 target=2 duration=1 parameter1 parameter2=104  STR_VAR resource="%SOURCE_RES%" END
+			LPF ADD_SPELL_EFFECT INT_VAR insert_point = 0 opcode = 324 target = 2 duration = 1 parameter1 parameter2 = 104  STR_VAR resource="%SOURCE_RES%" END
 		END // Construct
 		        LPF ALTER_SPELL_HEADER INT_VAR speed = 4 END		// Casting time increased from 3 to 4
   FOR (n = 0; n < 46; ++n) BEGIN														// Dice rolled
     SET amount = n + 7
-    LPF ALTER_EFFECT INT_VAR silent=1 header=n match_opcode=12 dicenumber=amount dicesize=4 END
+    LPF ALTER_EFFECT INT_VAR silent = 1 header = n match_opcode = 12 dicenumber=amount dicesize = 4 parameter1 = 0 END
   END
 BUT_ONLY IF_EXISTS 
 
@@ -721,7 +721,7 @@ STRING_SET_EVALUATE desc_strref "%desc%"
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 BEGIN "Accurate item description for Arrows of Biting" DESIGNATED 2511
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet iwdee" "Game must be Enhanced Edition"
+REQUIRE_PREDICATE GAME_IS "bgee bg2ee eet iwdee" "Game must be Baldur's Gate 2"
 
 COPY_EXISTING
 	"AROW05.ITM" override 
